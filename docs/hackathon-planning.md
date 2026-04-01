@@ -44,7 +44,7 @@ We need mentors for the weekend. Three pools:
 
 | Source | What they bring | Contact |
 |--------|----------------|---------|
-| **agentic.tm** (142 members) | Hands-on agentic AI / LLM API expertise | Vlad |
+| **agentic.tm** (200+ Discord, 500+ LinkedIn) | Hands-on agentic AI / LLM API expertise | Vlad |
 | **UPT faculty & PhD students** | Academic CS depth, GPU cluster access | TBD |
 | **UVT faculty & PhD students** | AI/ML research, venue support | TBD |
 
