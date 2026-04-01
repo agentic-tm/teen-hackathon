@@ -5,7 +5,7 @@
 **Date:** May 15–17, 2026 (Friday–Sunday)
 **Venue:** TBD (Timisoara)
 **Participants:** ~100 high school students from Romania's west region
-**Format:** Team-based
+**Format:** Team-based (~25 teams of 4)
 
 ---
 
@@ -13,18 +13,26 @@
 
 ### What is it?
 
-A 3-day hackathon where high school students build **agentic AI applications** using LLM APIs. Teams receive API credits from sponsors (Anthropic, OpenAI, Google, etc.) and use them to create projects that demonstrate autonomous agent behavior — not just chatbots, but systems that reason, plan, use tools, and take actions.
+A 3-day hackathon where high school students build **agentic AI applications** using LLM APIs. Teams receive API credits from sponsors and free-tier signups, and use them to create projects that demonstrate autonomous agent behavior — not just chatbots, but systems that reason, plan, use tools, and take actions.
 
 ### Why agentic programming?
 
 Agentic AI is the next frontier of applied AI. Teaching students to build agents — rather than simple prompt-and-response apps — prepares them for where the industry is heading. This hackathon gives students hands-on experience with real APIs and real constraints (budgets, rate limits, reliability).
+
+### What makes this unique?
+
+No existing event combines **teen-only + agentic AI + LLM API credits**. This is genuinely novel:
+- Teens in AI (UK) and WAICY (US) run teen AI events but focus on general AI/data science
+- Cluj Hackathon 2025 ("AI Agents Everywhere") was agentic-focused but open-age — a 14-year-old won 1st place, proving the teen audience works in Romania
+- ONIA (Romania's AI Olympiad) focuses on ML model training, not building with LLM APIs
+- UniHack (Timisoara) and HackTM are general tech hackathons
 
 ### Open Questions — Concept
 
 | # | Question | Options | Notes |
 |---|----------|---------|-------|
 | 1 | **What does "agentic" mean for this hackathon?** Should we define a minimum bar for what counts as an "agent"? | A) Must use tool calling / function calling. B) Must have a planning/reasoning loop (not just single-shot). C) Must involve multi-step autonomous action. D) Keep it loose — any LLM-powered app is fine. | Recommendation: Option B or C. Too loose and we get chatbot wrappers. Too strict and beginners can't participate. |
-| 2 | **Should we restrict which LLM providers students can use?** | A) Only sponsors' APIs (incentivizes sponsorship). B) Any provider, but we only supply credits for sponsors. C) Any provider, including open-source/local models. | Recommendation: Option B — don't restrict, but only fund sponsors. |
+| 2 | **Should we restrict which LLM providers students can use?** | A) Only sponsors' APIs (incentivizes sponsorship). B) Any provider, but we only supply credits for sponsors. C) Any provider, including open-source/local models. | Recommendation: Option C — don't restrict at all, let teams choose their stack. Credits from multiple providers will be available. |
 | 3 | **What's the skill level assumption?** Most high schoolers won't have API experience. | A) Assume zero experience — Day 1 is a full workshop. B) Require basic programming as prerequisite, teach APIs on Day 1. C) Provide starter templates/scaffolding so teams can focus on the agent logic. | Recommendation: B + C. Require basic Python/JS, provide starter code. |
 
 ---
@@ -73,47 +81,90 @@ Agentic AI is the next frontier of applied AI. Teaching students to build agents
 
 ---
 
-## 4. LLM API Credits — Sponsor Outreach
+## 4. LLM API Credits
 
-> **THIS IS TOP PRIORITY.** Credits are the core resource students need. Without them, the hackathon doesn't work.
+> **THIS IS TOP PRIORITY.** Credits are the core resource students need.
 
-### Credit Requirements Estimate
+### The Good News: Credits Are Not a Blocker
+
+Deep research shows the credit problem is solvable through multiple independent paths. Self-serve signups alone yield ~$14,000 in credits before any sponsorship.
+
+### Credit Budget
 
 | Parameter | Estimate |
 |-----------|----------|
 | Teams | ~25 |
 | Duration | ~48 hours of active hacking |
-| Estimated usage per team | Heavy experimentation during development, moderate during final runs |
-| Budget target per team | $50–100 in API credits (enough for thousands of API calls) |
-| **Total credits needed** | **$1,250–2,500 per provider** (if offering multiple providers) |
+| Per-team spend (budget models) | $5–15 (based on Portkey's data: 500-1,000 API calls on GPT-4o-mini/Gemini Flash) |
+| Per-team budget (with buffer) | $50–100 |
+| **Total needed** | **$1,500–3,000** |
+| **Total achievable** | **$30,000–50,000+** (across all paths) |
 
-### Target Providers
+### Layer 1: Self-Serve Credits (Students Sign Up — No Sponsorship Needed)
 
-| Provider | Product | Contact Path | Status |
-|----------|---------|-------------|--------|
-| **Anthropic** | Claude API | Developer relations / education programs | Not started |
-| **OpenAI** | GPT-4 / GPT-4o API | Education sponsorship program | Not started |
-| **Google** | Gemini API | Google for Education / Developer programs | Not started |
-| **Mistral** | Mistral API | Developer relations | Not started |
-| **Groq** | Fast inference | Developer community programs | Not started |
+Every student creates accounts on these platforms before the event:
 
-### Open Questions — Credits & Sponsors
+| Provider | Per-Student Credit | Total (100 students) | What They Get |
+|----------|-------------------|---------------------|---------------|
+| **Together AI** | $100 signup bonus | **$10,000** | 200+ open-source models (Llama 4, DeepSeek, Qwen) |
+| **xAI (Grok)** | $25 signup | **$2,500** | Grok models |
+| **Gemini (Google)** | 1,000 req/day free (Flash-Lite) | **100K req/day** | Gemini 2.5 Flash-Lite, Flash, Pro |
+| **Mistral** | 1B tokens/mo free (all models) | **Massive** | Mistral Large, Small, Codestral, Pixtral |
+| **Groq** | Free tier (rate-limited) | **Free** | Llama, Mixtral — ultra-fast inference |
+| **DeepSeek** | 5M tokens (~$8.40) | **$840** | DeepSeek V3, R1 |
+| **GitHub Models** | 50 req/day GPT-4o | **5,000/day** | GPT-4o, Grok-3, DeepSeek-R1, Llama |
+| **OpenAI** | $5 trial | **$500** | GPT-4o, GPT-4o-mini |
+| **Anthropic** | $5 trial | **$500** | Claude Sonnet, Haiku |
+
+**Age caveat:** Most providers require 18+ or parental consent. Google requires 16+ in EU. Address this in registration.
+
+### Layer 2: Sponsored Credits (Apply Now)
+
+| Provider | Program | How to Apply | Expected Credits | Deadline |
+|----------|---------|-------------|-----------------|----------|
+| **OpenAI** | Hackathon Support Program | [openai.com/form/hackathon-support](https://openai.com/form/hackathon-support/) | $500–2,500 | **April 10** (1-month lead time) |
+| **Anthropic** | Community Ambassadors | [Typeform](https://form.typeform.com/to/OIUYgsnS) | Monthly credits + event funding | **April 5** |
+| **Anthropic** | Student Builders (per student) | [anthropic.com/contact-sales/for-student-builders](https://www.anthropic.com/contact-sales/for-student-builders) | ~$50/student | 5-7 business days |
+| **Mistral** | Direct outreach (EU angle) | Email Sophia Yang (Head of DevRel) — [LinkedIn](https://www.linkedin.com/in/sophiamyang/), contact@mistral.ai | Hackathon API access | **April 7** |
+| **Mistral** | Ambassador Program | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdBSiRzm2xBpMszB_9fBixJNyKdGnPMj99DtZbagHMdHgkGUg/viewform) | Free credits + event support | Rolling |
+| **Groq** | Hackathon Credits (self-serve) | [console.groq.com/landing/hackathon](https://console.groq.com/landing/hackathon) + Discord DM DevRel | $10/participant | **April 7** |
+| **MLH** | Event Membership | [mlh.io/event-membership](https://mlh.io/event-membership) | $10/student OpenRouter + Google perks | **ASAP** (usually 3-4 months) |
+
+**Mistral pitch angle:** "European AI company supporting European student talent." Mistral is French, investing heavily in EU AI sovereignty ($830M data center, Franco-German initiative, French military contract). A Romanian university hackathon is a natural fit.
+
+**Warm leads (already sponsor ONIA — Romanian AI Olympiad):** Bitdefender, Google, GitHub, eMAG.
+
+### Layer 3: University Credit Programs
+
+| Program | Credits | Who Applies | URL |
+|---------|---------|------------|-----|
+| **Google Cloud Teaching Credits** | $50/student ($5,000 total) | UPT or UVT faculty | [edu.google.com/.../teaching](https://edu.google.com/intl/ALL_us/programs/credits/teaching/) |
+| **Google Cloud Research Credits** | Up to $5,000 | UPT/UVT professor or PhD student | [edu.google.com/.../research](https://edu.google.com/intl/ALL_us/programs/credits/research/) |
+| **AWS Educate** | $75-100/student ($7,500-10,000) | Students with school email | [aws.amazon.com/education/awseducate](https://aws.amazon.com/education/awseducate/) |
+| **Azure for Students** | $100/student ($10,000) | Students with school email, no card | [azure.microsoft.com/free/students](https://azure.microsoft.com/en-us/free/students) |
+
+Note: Google Cloud and Azure credits give access to Gemini, GPT-4o, Claude, Mistral, and Llama through their respective AI services (Vertex AI, Azure OpenAI, Bedrock).
+
+### Layer 4: Technical Distribution (If We Get Bulk Keys)
+
+| Solution | Type | Best For |
+|----------|------|----------|
+| **OpenRouter Provisionary Keys** | SaaS | Simplest — generate temp keys with credit limits, 500+ models, no student accounts needed |
+| **LiteLLM Proxy** | Self-hosted (free) | Maximum control — per-team budgets, 100+ providers, OpenAI-compatible |
+| **Portkey** | SaaS | Real-time dashboards, budget alerts at 80%, rate limiting |
+
+### Layer 5: Zero-Cost Fallback
+
+- **Local inference with Ollama:** Pre-install on backup machines or USB drives. Phi-4-mini (3.8B, 2.5GB RAM), Llama 3.2 8B (6GB RAM), Mistral 7B (5GB RAM). Works offline, no API keys, no cost.
+- **Nuclear option:** Buy $500 of Gemini Flash-Lite ($0.10/1M input tokens) — covers the entire event at paid rates.
+
+### Open Questions — Credits
 
 | # | Question | Options | Notes |
 |---|----------|---------|-------|
-| 11 | **How many providers should we target?** | A) One primary sponsor (simpler, deeper relationship). B) 2–3 providers (gives students choice, reduces risk). C) As many as possible (maximize resources). | Recommendation: B — 2–3 providers. More manageable than "all of them" but less risky than relying on one. |
-| 12 | **What do we offer sponsors in return?** | A) Logo placement + mention in opening/closing. B) A + dedicated sponsor workshop/demo slot. C) A + B + access to winning project demos. D) Full partnership package (all above + recruitment access). | Need to define sponsorship tiers. |
-| 13 | **Credit distribution model** — how do teams get credits? | A) Shared API key per provider with per-team rate limits. B) Individual API keys per team with hard spending caps. C) Provider-managed (ask sponsor to set up team accounts). | Depends on what providers offer for events. |
-| 14 | **Backup plan** — what if we don't get enough sponsored credits? | A) Organizers fund credits from event budget. B) Use open-source/local models as fallback (Ollama, etc.). C) Reduce team count to match available credits. D) Mix — some sponsored, some self-funded, local model option. | Must have a plan for this. |
-
-### Outreach Timeline
-
-| When | What |
-|------|------|
-| **Now – April 15** | Draft sponsorship pitch deck / email. Identify contacts at each provider. |
-| **April 15 – April 30** | Send outreach. Follow up. |
-| **May 1 – May 7** | Confirm credits. Set up accounts/keys. Test access. |
-| **May 8 – May 14** | Distribute credentials to team lead system. Dry run. |
+| 11 | **Primary credit distribution model?** | A) Students create their own accounts on multiple providers (simplest). B) OpenRouter provisionary keys (unified, organizer-controlled). C) Mix — self-serve for free tiers, OpenRouter for sponsored credits. | Recommendation: Option C. |
+| 12 | **What do we offer sponsors in return?** | A) Logo + mention in opening/closing. B) A + dedicated workshop/demo slot. C) A + B + access to winning project demos. D) Full partnership (all above + recruitment access). | Need to define sponsorship tiers. |
+| 13 | **How do we handle the age/consent issue?** | A) Require parental consent forms for all account creation. B) Organizers create shared accounts and distribute keys. C) Focus on providers with no age restriction or lower thresholds. | Legal question — needs organizer decision. |
 
 ---
 
@@ -123,23 +174,75 @@ Agentic AI is the next frontier of applied AI. Teaching students to build agents
 
 | # | Question | Options | Notes |
 |---|----------|---------|-------|
-| 15 | **Registration process** | A) Google Form. B) Custom registration page on olimpiada-ai.ro. C) Eventbrite or similar platform. | |
-| 16 | **Prerequisites** — what should students know before arriving? | A) Basic programming (any language). B) Python specifically. C) No prerequisites — we'll teach everything. | Recommendation: A — basic programming. We provide API/agent workshops. |
-| 17 | **Food & accommodation** | A) Organizers provide meals only (students stay locally or commute). B) Full board — meals + accommodation for out-of-town students. C) Meals provided, accommodation partnerships with local hostels/dorms. | |
-| 18 | **Mentors** — who helps students during hacking? | A) University staff/PhD students from UPT and UVT. B) Industry volunteers from agentic.tm network. C) Mix of both. | Recommendation: C. |
+| 14 | **Registration process** | A) Google Form. B) Custom registration page on olimpiada-ai.ro. C) Eventbrite or similar platform. | |
+| 15 | **Prerequisites** — what should students know before arriving? | A) Basic programming (any language). B) Python specifically. C) No prerequisites — we'll teach everything. | Recommendation: A — basic programming. We provide API/agent workshops. |
+| 16 | **Food & accommodation** | A) Organizers provide meals only (students stay locally or commute). B) Full board — meals + accommodation for out-of-town students. C) Meals provided, accommodation partnerships with local hostels/dorms. | |
+| 17 | **Mentors** — who helps students during hacking? | A) University staff/PhD students from UPT and UVT. B) Industry volunteers from agentic.tm network (142 members). C) Mix of both. | Recommendation: C. agentic.tm provides technical agentic AI expertise, universities provide academic support. |
 
 ---
 
-## 6. Next Steps — Action Items
+## 6. Ecosystem Context
 
-| Priority | Action | Owner | Deadline |
-|----------|--------|-------|----------|
-| **P0** | Finalize hackathon concept (resolve questions 1–3) | All organizers | April 7 |
-| **P0** | Draft sponsor outreach email/pitch | | April 10 |
-| **P0** | Send outreach to Anthropic, OpenAI, Google | | April 15 |
-| **P1** | Confirm venue | | April 15 |
-| **P1** | Define challenge tracks and judging criteria | | April 20 |
-| **P1** | Open registration | | April 20 |
-| **P2** | Recruit mentors | | May 1 |
-| **P2** | Prepare workshop materials | | May 10 |
-| **P2** | Set up credit distribution system | | May 12 |
+### Timisoara Hackathon Scene
+- **HackTM 2026:** May 11-16 (the week before us!) — 10K EUR prizes, has "Best AI" award
+- **UniHack:** UPT/Liga AC, MLH-sanctioned, open to high school + university
+- **ITFest:** UVT/OSUT student org, 48hr hackathon within festival
+
+### Romanian AI Competition Pipeline
+- **ONIA:** Ministry-accredited National AI Olympiad (grades 9-12). 298 students in 2026 simulation. Nationals April 17-20.
+- **IOAI:** Romania sent 8 students to Beijing 2025 — 1 gold, 4 silver, 3 bronze.
+- **CEOAI 2026:** Inaugural Central European AI Olympiad, July 14-19 in Cluj-Napoca.
+
+### Our Differentiation
+ONIA trains ML models. UniHack/HackTM are general tech. We teach students to **build with LLM APIs and create AI agents** — a practical skill gap that no other Romanian event fills.
+
+---
+
+## 7. Action Items
+
+### P0 — This Week (by April 7)
+
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 1 | Finalize hackathon concept (resolve questions 1–3) | All organizers | |
+| 2 | Apply to OpenAI Hackathon Support | | |
+| 3 | Apply to Anthropic Community Ambassadors | | |
+| 4 | Apply for MLH Event Membership | | |
+| 5 | Set up Groq hackathon credits | | |
+| 6 | Email Mistral DevRel (Sophia Yang) | | |
+
+### P0 — Next Week (by April 14)
+
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 7 | UPT/UVT faculty: apply for Google Cloud Teaching Credits | | |
+| 8 | UPT/UVT faculty: apply for Google Cloud Research Credits | | |
+| 9 | Draft sponsor outreach email/pitch deck | | |
+| 10 | Contact warm leads (Bitdefender, Google, GitHub — already sponsor ONIA) | | |
+
+### P1 — By April 20
+
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 11 | Confirm venue | | |
+| 12 | Define challenge tracks and judging criteria | | |
+| 13 | Open registration | | |
+| 14 | Resolve age/consent question for API accounts | | |
+
+### P2 — By May 1
+
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 15 | Recruit mentors (UPT, UVT, agentic.tm) | | |
+| 16 | Prepare workshop materials (LLM APIs, tool calling, agent patterns) | | |
+| 17 | Build starter templates/scaffolding for students | | |
+
+### P2 — Pre-Event (May 1–14)
+
+| # | Action | Owner | Status |
+|---|--------|-------|--------|
+| 18 | Have students create accounts: Together AI, Groq, Mistral, Google AI Studio, GitHub | | |
+| 19 | Set up credit distribution (OpenRouter keys or direct) | | |
+| 20 | Pre-install Ollama on backup machines | | |
+| 21 | Test all API access and rate limits end-to-end | | |
+| 22 | Dry run of full event flow | | |
