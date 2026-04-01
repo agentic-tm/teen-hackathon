@@ -159,10 +159,38 @@ Note: Google Cloud and Azure credits give access to Gemini, GPT-4o, Claude, Mist
 | **LiteLLM Proxy** | Self-hosted (free) | Maximum control — per-team budgets, 100+ providers, OpenAI-compatible | [LiteLLM docs](https://docs.litellm.ai/docs/simple_proxy) |
 | **Portkey** | SaaS | Real-time dashboards, budget alerts at 80%, rate limiting | [Portkey hackathon guide](https://portkey.ai/blog/how-to-host-an-ai-hackathon-without-losing-control-of-your-keys-or-budget/) |
 
-### Layer 5: Zero-Cost Fallback
+### Layer 5: University GPU Clusters + Local Inference
 
-- **Local inference with Ollama:** Pre-install on backup machines or USB drives. Phi-4-mini (3.8B, 2.5GB RAM), Llama 3.2 8B (6GB RAM), Mistral 7B (5GB RAM). Works offline, no API keys, no cost. [Ollama model library](https://ollama.com/library), [hardware requirements guide](https://www.sitepoint.com/local-llm-hardware-requirements-mac-vs-pc-2026/)
-- **Nuclear option:** Buy $500 of Gemini Flash-Lite ([$0.10/1M input tokens](https://ai.google.dev/gemini-api/docs/pricing)) — covers the entire event at paid rates.
+**UPT and UVT have GPU clusters** that can host open-source models for the hackathon. This is potentially the strongest fallback — zero external dependency, zero cost, high throughput.
+
+**Setup:** Deploy open-source models (Llama 4, Mistral, DeepSeek) on university GPUs using [vLLM](https://github.com/vllm-project/vllm) or [Ollama](https://ollama.com). Expose an OpenAI-compatible API endpoint on the university network. Use [LiteLLM](https://docs.litellm.ai/docs/simple_proxy) in front to add per-team budgets and rate limits.
+
+**Advantages over cloud APIs:**
+- No age/consent issues — organizer-controlled, no student accounts needed
+- No rate limits imposed by external providers
+- No cost (university infrastructure)
+- Full control over which models are available
+- Works even if the venue WiFi is unreliable for external APIs
+
+**Models to deploy (depending on GPU VRAM):**
+
+| Model | VRAM Needed | Quality | Notes |
+|-------|-----------|---------|-------|
+| Llama 4 Scout 17B | ~12 GB (quantized) | Excellent | Meta's latest |
+| Mistral Small 3.1 24B | ~16 GB (quantized) | Excellent | Strong reasoning |
+| DeepSeek-V3 (quantized) | ~40 GB | Top-tier | Needs larger GPU |
+| Llama 3.1 70B | ~40 GB (Q4) | Flagship | Needs A100/H100 |
+| Phi-4-mini 3.8B | ~3 GB | Good for basics | Runs on any GPU |
+
+**Open questions for UPT/UVT:**
+- What GPU hardware is available? (NVIDIA A100, H100, V100, consumer GPUs?)
+- How many GPUs can be allocated for the event weekend?
+- Is there a sysadmin who can help with deployment?
+- Can the cluster be accessed from the hackathon venue network?
+
+**Additional fallbacks:**
+- **Ollama on student laptops:** Phi-4-mini (2.5GB RAM), Llama 3.2 8B (6GB RAM). Works offline. [Ollama model library](https://ollama.com/library)
+- **Buy $500 of Gemini Flash-Lite** ([$0.10/1M input tokens](https://ai.google.dev/gemini-api/docs/pricing)) — covers the entire event at paid rates.
 
 ### Open Questions — Credits
 
