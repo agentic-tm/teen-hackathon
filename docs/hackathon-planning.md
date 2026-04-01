@@ -4,10 +4,10 @@
 |---|---|
 | **Organizers** | agentic.tm, UPT, UVT |
 | **Part of** | [olimpiada-ai.ro](https://olimpiada-ai.ro/en/calendar) |
-| **Date** | May 15–17, 2026 |
+| **Date** | May 15-17, 2026 |
 | **Venue** | TBD (Timisoara) |
 | **Participants** | ~100 high school students, Romania west region |
-| **Teams** | 2–4 members, BYOD |
+| **Teams** | 2-4 members, BYOD |
 
 ---
 
@@ -15,11 +15,11 @@
 
 ### Theme: HUMAN IN THE LOOP
 
-The central theme of this hackathon is **Human in the Loop** — building AI agents that work *with* humans, not instead of them.
+The central theme of this hackathon is **Human in the Loop** - building AI agents that work *with* humans, not instead of them.
 
-Students build agents that reason, plan, use tools, and take actions — but with a human guiding, reviewing, approving, or collaborating at critical points. The agent proposes, the human decides. The agent drafts, the human refines. The agent acts, the human supervises.
+Students build agents that reason, plan, use tools, and take actions - but with a human guiding, reviewing, approving, or collaborating at critical points. The agent proposes, the human decides. The agent drafts, the human refines. The agent acts, the human supervises.
 
-This isn't a constraint — it's the point. The most powerful AI systems in production today are human-in-the-loop. Teaching students this from day one sets them apart.
+This isn't a constraint - it's the point. The most powerful AI systems in production today are human-in-the-loop. Teaching students this from day one sets them apart.
 
 Students get API credits from multiple providers and choose their own stack. No restrictions on tools or models.
 
@@ -28,9 +28,9 @@ Students get API credits from multiple providers and choose their own stack. No 
 | # | Question | Options |
 |---|----------|---------|
 | 1 | **Friday evening or Saturday morning start?** | Fri evening = more hacking hours. Sat morning = simpler logistics. |
-| 2 | **Teams pre-formed or matchmaking?** | A) Pre-formed only. B) Matchmaking workshop Day 1. C) Mix — register as team or solo. |
+| 2 | **Teams pre-formed or matchmaking?** | A) Pre-formed only. B) Matchmaking workshop Day 1. C) Mix - register as team or solo. |
 | 3 | **Venue?** | UPT / UVT / External. Need: WiFi for 100, power outlets, projector, breakout rooms. |
-| 4 | **How specific is the challenge brief?** | A) Broad ("build a HITL agent"). B) 2–3 specific problems. C) Fully open. |
+| 4 | **How specific is the challenge brief?** | A) Broad ("build a HITL agent"). B) 2-3 specific problems. C) Fully open. |
 | 5 | **Judging criteria & prizes?** | Criteria: technical depth, real-world impact, HITL design quality, creativity. Prize structure TBD. |
 | 6 | **Food & accommodation?** | Meals only / full board / meals + dorm partnerships. |
 | 7 | **Registration?** | Google Form / olimpiada-ai.ro page / Eventbrite. |
@@ -54,7 +54,7 @@ We need mentors for the weekend. Three pools:
 
 ## Credits
 
-Credits are solved. We need $1,500–3,000 total. Multiple paths available, detailed in [credit-programs.md](credit-programs.md).
+Credits are solved. We need $1,500-3,000 total. Multiple paths available, detailed in [credit-programs.md](credit-programs.md).
 
 **What students sign up for before the event (free, no sponsorship needed):**
 
@@ -67,7 +67,7 @@ Credits are solved. We need $1,500–3,000 total. Multiple paths available, deta
 | Groq | Free tier, ultra-fast | [console.groq.com](https://console.groq.com/docs/rate-limits) |
 | GitHub Models | 50 req/day GPT-4o | [docs.github.com](https://docs.github.com/en/github-models/prototyping-with-ai-models) |
 
-Self-serve alone = ~$14,000 across 100 students. That's 5–10x what we need.
+Self-serve alone = ~$14,000 across 100 students. That's 5-10x what we need.
 
 **Sponsor applications (in progress):**
 
@@ -91,9 +91,9 @@ Self-serve alone = ~$14,000 across 100 students. That's 5–10x what we need.
 
 | # | Action | Owner |
 |---|--------|-------|
-| 1 | **Finalize concept** — answer questions 1–8 above | All organizers |
-| 2 | **Recruit mentors** — reach out to agentic.tm, UPT, UVT | Vlad + Bianca |
-| 3 | **Design** — concept, mockups, site, media graphics | Marius |
+| 1 | **Finalize concept** - answer questions 1-8 above | All organizers |
+| 2 | **Recruit mentors** - reach out to agentic.tm, UPT, UVT | Vlad + Bianca |
+| 3 | **Design** - concept, mockups, site, media graphics | Marius |
 | 4 | Apply to OpenAI Hackathon Support | |
 | 5 | Apply to Anthropic Community Ambassadors | |
 | 6 | Email Mistral DevRel | |
@@ -116,7 +116,7 @@ Self-serve alone = ~$14,000 across 100 students. That's 5–10x what we need.
 | 13 | Prepare workshop materials | |
 | 14 | Build starter templates for students | |
 
-### Pre-event (May 1–14)
+### Pre-event (May 1-14)
 
 | # | Action | Owner |
 |---|--------|-------|
