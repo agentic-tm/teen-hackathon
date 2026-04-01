@@ -44,7 +44,7 @@ We need mentors for the weekend. Three pools:
 | **UPT faculty & PhD students** | Academic CS depth, GPU cluster access | TBD |
 | **UVT faculty & PhD students** | AI/ML research, venue support | TBD |
 
-**Action:** Recruit 15–20 mentors. Ratio of ~1 mentor per 5–6 students.
+**Action:** Recruit 10 mentors. ~1 mentor per 10 students.
 
 ---
 
