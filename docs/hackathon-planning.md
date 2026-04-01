@@ -1,11 +1,13 @@
 # Agentic Programming Hackathon
 
-**Organizers:** agentic.tm, UPT, UVT
-**Part of:** [olimpiada-ai.ro](https://olimpiada-ai.ro/en/calendar)
-**Date:** May 15–17, 2026
-**Venue:** TBD (Timisoara)
-**Participants:** ~100 high school students, Romania west region
-**Teams:** 2–4 members, BYOD
+|  |  |
+|---|---|
+| **Organizers** | agentic.tm, UPT, UVT |
+| **Part of** | [olimpiada-ai.ro](https://olimpiada-ai.ro/en/calendar) |
+| **Date** | May 15–17, 2026 |
+| **Venue** | TBD (Timisoara) |
+| **Participants** | ~100 high school students, Romania west region |
+| **Teams** | 2–4 members, BYOD |
 
 ---
 
