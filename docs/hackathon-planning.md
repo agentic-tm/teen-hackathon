@@ -93,32 +93,33 @@ Self-serve alone = ~$14,000 across 100 students. That's 5–10x what we need.
 |---|--------|-------|
 | 1 | **Finalize concept** — answer questions 1–8 above | All organizers |
 | 2 | **Recruit mentors** — reach out to agentic.tm, UPT, UVT | Vlad + Bianca |
-| 3 | Apply to OpenAI Hackathon Support | |
-| 4 | Apply to Anthropic Community Ambassadors | |
-| 5 | Email Mistral DevRel | |
-| 6 | Set up Groq hackathon credits | |
-| 7 | Apply for MLH Event Membership | |
+| 3 | **Design** — concept, mockups, site, media graphics | Marius |
+| 4 | Apply to OpenAI Hackathon Support | |
+| 5 | Apply to Anthropic Community Ambassadors | |
+| 6 | Email Mistral DevRel | |
+| 7 | Set up Groq hackathon credits | |
+| 8 | Apply for MLH Event Membership | |
 
 ### By April 14
 
 | # | Action | Owner |
 |---|--------|-------|
-| 8 | UPT/UVT faculty: apply for Google Cloud Teaching Credits ([link](https://edu.google.com/intl/ALL_us/programs/credits/teaching/)) | |
-| 9 | Confirm venue | |
-| 10 | Open registration | |
-| 11 | Check UPT/UVT GPU cluster availability | |
+| 9 | UPT/UVT faculty: apply for Google Cloud Teaching Credits ([link](https://edu.google.com/intl/ALL_us/programs/credits/teaching/)) | |
+| 10 | Confirm venue | |
+| 11 | Open registration | |
+| 12 | Check UPT/UVT GPU cluster availability | |
 
 ### By May 1
 
 | # | Action | Owner |
 |---|--------|-------|
-| 12 | Prepare workshop materials | |
-| 13 | Build starter templates for students | |
+| 13 | Prepare workshop materials | |
+| 14 | Build starter templates for students | |
 
 ### Pre-event (May 1–14)
 
 | # | Action | Owner |
 |---|--------|-------|
-| 14 | Students create accounts (Together AI, Groq, Mistral, Google AI Studio, GitHub) | |
-| 15 | Set up credit distribution | |
-| 16 | Test all API access end-to-end | |
+| 15 | Students create accounts (Together AI, Groq, Mistral, Google AI Studio, GitHub) | |
+| 16 | Set up credit distribution | |
+| 17 | Test all API access end-to-end | |
