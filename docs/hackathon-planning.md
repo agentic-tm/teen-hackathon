@@ -13,11 +13,15 @@
 
 ## Concept
 
-High school students build **human-in-the-loop AI agents** using LLM APIs over a weekend.
+### Theme: HUMAN IN THE LOOP
 
-Not chatbots. Not prompt wrappers. Agents that reason, use tools, and take actions — with a human guiding, reviewing, or collaborating at key points. Students get API credits from multiple providers and choose their own stack.
+The central theme of this hackathon is **Human in the Loop** — building AI agents that work *with* humans, not instead of them.
 
-No other Romanian event teaches students to **build with LLM APIs**. ONIA trains ML models. UniHack/HackTM are general tech. This fills a real gap.
+Students build agents that reason, plan, use tools, and take actions — but with a human guiding, reviewing, approving, or collaborating at critical points. The agent proposes, the human decides. The agent drafts, the human refines. The agent acts, the human supervises.
+
+This isn't a constraint — it's the point. The most powerful AI systems in production today are human-in-the-loop. Teaching students this from day one sets them apart.
+
+Students get API credits from multiple providers and choose their own stack. No restrictions on tools or models.
 
 ### What we need to finalize
 
