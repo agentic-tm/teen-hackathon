@@ -95,7 +95,7 @@ Deep research shows the credit problem is solvable through multiple independent 
 |-----------|----------|
 | Teams | ~25 |
 | Duration | ~48 hours of active hacking |
-| Per-team spend (budget models) | $5–15 (based on Portkey's data: 500-1,000 API calls on GPT-4o-mini/Gemini Flash) |
+| Per-team spend (budget models) | $5–15 ([Portkey's hackathon data](https://portkey.ai/blog/how-to-host-an-ai-hackathon-without-losing-control-of-your-keys-or-budget/): 500-1,000 API calls on GPT-4o-mini/Gemini Flash) |
 | Per-team budget (with buffer) | $50–100 |
 | **Total needed** | **$1,500–3,000** |
 | **Total achievable** | **$30,000–50,000+** (across all paths) |
@@ -104,59 +104,65 @@ Deep research shows the credit problem is solvable through multiple independent 
 
 Every student creates accounts on these platforms before the event:
 
-| Provider | Per-Student Credit | Total (100 students) | What They Get |
-|----------|-------------------|---------------------|---------------|
-| **Together AI** | $100 signup bonus | **$10,000** | 200+ open-source models (Llama 4, DeepSeek, Qwen) |
-| **xAI (Grok)** | $25 signup | **$2,500** | Grok models |
-| **Gemini (Google)** | 1,000 req/day free (Flash-Lite) | **100K req/day** | Gemini 2.5 Flash-Lite, Flash, Pro |
-| **Mistral** | 1B tokens/mo free (all models) | **Massive** | Mistral Large, Small, Codestral, Pixtral |
-| **Groq** | Free tier (rate-limited) | **Free** | Llama, Mixtral — ultra-fast inference |
-| **DeepSeek** | 5M tokens (~$8.40) | **$840** | DeepSeek V3, R1 |
-| **GitHub Models** | 50 req/day GPT-4o | **5,000/day** | GPT-4o, Grok-3, DeepSeek-R1, Llama |
-| **OpenAI** | $5 trial | **$500** | GPT-4o, GPT-4o-mini |
-| **Anthropic** | $5 trial | **$500** | Claude Sonnet, Haiku |
+| Provider | Per-Student Credit | Total (100 students) | What They Get | Source |
+|----------|-------------------|---------------------|---------------|--------|
+| **Together AI** | $100 signup bonus | **$10,000** | 200+ open-source models (Llama 4, DeepSeek, Qwen) | [together.ai/pricing](https://www.together.ai/pricing), [community confirmation](https://thinktank.ottomator.ai/t/together-ai-offering-100-free-credits-and-deepseek-r1/4892) |
+| **xAI (Grok)** | $25 signup | **$2,500** | Grok models | [xAI free credits details](https://www.getaiperks.com/en/blogs/22-xai-grok-free-credits), [API docs](https://grok-api.apidog.io/free-credits-934025m0) |
+| **Gemini (Google)** | 1,000 req/day free (Flash-Lite) | **100K req/day** | Gemini 2.5 Flash-Lite, Flash, Pro | [Gemini API pricing](https://ai.google.dev/gemini-api/docs/pricing), [rate limits](https://ai.google.dev/gemini-api/docs/rate-limits) |
+| **Mistral** | 1B tokens/mo free (all models) | **Massive** | Mistral Large, Small, Codestral, Pixtral | [Mistral pricing](https://mistral.ai/pricing), [Experiment plan FAQ](https://help.mistral.ai/en/articles/455206-how-can-i-try-the-api-for-free-with-the-experiment-plan) |
+| **Groq** | Free tier (rate-limited) | **Free** | Llama, Mixtral — ultra-fast inference | [Groq rate limits](https://console.groq.com/docs/rate-limits), [free tier FAQ](https://community.groq.com/t/is-there-a-free-tier-and-what-are-its-limits/790) |
+| **DeepSeek** | 5M tokens (~$8.40) | **$840** | DeepSeek V3, R1 | [DeepSeek pricing](https://deepseek.ai/pricing), [free tier details](https://mydeepseekapi.com/blog/deepseek-api-free-tiers) |
+| **GitHub Models** | 50 req/day GPT-4o | **5,000/day** | GPT-4o, Grok-3, DeepSeek-R1, Llama | [GitHub Models docs](https://docs.github.com/en/github-models/prototyping-with-ai-models), [billing](https://docs.github.com/billing/managing-billing-for-your-products/about-billing-for-github-models) |
+| **OpenAI** | $5 trial | **$500** | GPT-4o, GPT-4o-mini | [OpenAI rate limits](https://platform.openai.com/docs/guides/rate-limits) |
+| **Anthropic** | $5 trial | **$500** | Claude Sonnet, Haiku | [Anthropic rate limits & tiers](https://platform.claude.com/docs/en/api/rate-limits) |
 
-**Age caveat:** Most providers require 18+ or parental consent. Google requires 16+ in EU. Address this in registration.
+**Age caveat:** Most providers require 18+ or parental consent. Google requires 16+ in EU ([GDPR reference](https://commission.europa.eu/law/law-topic/data-protection_en)). Address this in registration.
 
 ### Layer 2: Sponsored Credits (Apply Now)
 
-| Provider | Program | How to Apply | Expected Credits | Deadline |
-|----------|---------|-------------|-----------------|----------|
-| **OpenAI** | Hackathon Support Program | [openai.com/form/hackathon-support](https://openai.com/form/hackathon-support/) | $500–2,500 | **April 10** (1-month lead time) |
-| **Anthropic** | Community Ambassadors | [Typeform](https://form.typeform.com/to/OIUYgsnS) | Monthly credits + event funding | **April 5** |
-| **Anthropic** | Student Builders (per student) | [anthropic.com/contact-sales/for-student-builders](https://www.anthropic.com/contact-sales/for-student-builders) | ~$50/student | 5-7 business days |
-| **Mistral** | Direct outreach (EU angle) | Email Sophia Yang (Head of DevRel) — [LinkedIn](https://www.linkedin.com/in/sophiamyang/), contact@mistral.ai | Hackathon API access | **April 7** |
-| **Mistral** | Ambassador Program | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdBSiRzm2xBpMszB_9fBixJNyKdGnPMj99DtZbagHMdHgkGUg/viewform) | Free credits + event support | Rolling |
-| **Groq** | Hackathon Credits (self-serve) | [console.groq.com/landing/hackathon](https://console.groq.com/landing/hackathon) + Discord DM DevRel | $10/participant | **April 7** |
-| **MLH** | Event Membership | [mlh.io/event-membership](https://mlh.io/event-membership) | $10/student OpenRouter + Google perks | **ASAP** (usually 3-4 months) |
+| Provider | Program | How to Apply | Expected Credits | Deadline | Source |
+|----------|---------|-------------|-----------------|----------|--------|
+| **OpenAI** | Hackathon Support Program | [openai.com/form/hackathon-support](https://openai.com/form/hackathon-support/) | $500–2,500 | **April 10** (1-month lead time) | [OpenAI hackathon page](https://developers.openai.com/hackathons), [community thread](https://community.openai.com/t/is-there-a-way-to-apply-for-openai-credits-for-a-hackathon-im-organizing/1028795) |
+| **Anthropic** | Community Ambassadors | [Typeform](https://form.typeform.com/to/OIUYgsnS) | Monthly credits + event funding | **April 5** | [Ambassador program page](https://claude.com/community/ambassadors) |
+| **Anthropic** | Student Builders (per student) | [anthropic.com/contact-sales/for-student-builders](https://www.anthropic.com/contact-sales/for-student-builders) | ~$50/student | 5-7 business days | [Program details](https://aistudentdiscount.com/claude-api-student-builder/), [Campus program](https://claude.com/programs/campus) |
+| **Mistral** | Direct outreach (EU angle) | Email Sophia Yang (Head of DevRel) — [LinkedIn](https://www.linkedin.com/in/sophiamyang/), contact@mistral.ai | Hackathon API access | **April 7** | [Mistral contact](https://mistral.ai/contact), [Sophia Yang on Mistralship](https://x.com/sophiamyang/status/1862177692780495356) |
+| **Mistral** | Ambassador Program | [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdBSiRzm2xBpMszB_9fBixJNyKdGnPMj99DtZbagHMdHgkGUg/viewform) | Free credits + event support | Rolling | [Ambassador docs](https://docs.mistral.ai/guides/contribute/ambassador/) |
+| **Groq** | Hackathon Credits (self-serve) | [console.groq.com/landing/hackathon](https://console.groq.com/landing/hackathon) + [Discord](https://discord.gg/groq) DM DevRel | $10/participant | **April 7** | [Global Agent Hackathon (Groq sponsor)](https://github.com/global-agent-hackathon/global-agent-hackathon-may-2025) |
+| **MLH** | Event Membership | [mlh.io/event-membership](https://mlh.io/event-membership) | $10/student OpenRouter + Google perks | **ASAP** (usually 3-4 months) | [MLH software resources](https://www.mlh.com/resources/software), [MLH+Google partnership](https://news.mlh.io/major-league-hacking-google-cloud-partnership-10-22-2025), [MLH+OpenRouter](https://gist.github.com/thisisryanswift/615ab9fa80590e380b46e36a1b5dcfe4) |
 
-**Mistral pitch angle:** "European AI company supporting European student talent." Mistral is French, investing heavily in EU AI sovereignty ($830M data center, Franco-German initiative, French military contract). A Romanian university hackathon is a natural fit.
+**Mistral pitch angle:** "European AI company supporting European student talent." Mistral is French, investing heavily in EU AI sovereignty ([€830M data center](https://sifted.eu/articles/mistral-830m-loan-data-centres), [Franco-German sovereign AI](https://planet.news/article/mistral-ai-european-expansion-march-2026), French military contract). A Romanian university hackathon is a natural fit.
 
-**Warm leads (already sponsor ONIA — Romanian AI Olympiad):** Bitdefender, Google, GitHub, eMAG.
+**Warm leads (already sponsor ONIA — Romanian AI Olympiad):** Bitdefender, Google, GitHub, eMAG. See [olimpiada-ai.ro](https://olimpiada-ai.ro/en/calendar).
+
+**Precedents for how much sponsors give hackathons:**
+- HuggingFace Agents-MCP Hackathon: [$25/participant from Anthropic + OpenAI](https://huggingface.co/Agents-MCP-Hackathon) to first 1,000 registrants
+- Anthropic Built with Opus 4.6: [$500/participant](https://www.adwaitx.com/claude-code-hackathon-opus-4-6/) (500 participants, $100K pool)
+- Mistral Worldwide Hackathon: [48hr API access for all + $100/participant](https://worldwide-hackathon.mistral.ai/) for fine-tuning events
+- Google EMEA Gemini Hackathon: [$300/participant](https://googlecloudgeminihackathon.devpost.com/) via new GCP accounts
 
 ### Layer 3: University Credit Programs
 
-| Program | Credits | Who Applies | URL |
-|---------|---------|------------|-----|
-| **Google Cloud Teaching Credits** | $50/student ($5,000 total) | UPT or UVT faculty | [edu.google.com/.../teaching](https://edu.google.com/intl/ALL_us/programs/credits/teaching/) |
-| **Google Cloud Research Credits** | Up to $5,000 | UPT/UVT professor or PhD student | [edu.google.com/.../research](https://edu.google.com/intl/ALL_us/programs/credits/research/) |
-| **AWS Educate** | $75-100/student ($7,500-10,000) | Students with school email | [aws.amazon.com/education/awseducate](https://aws.amazon.com/education/awseducate/) |
-| **Azure for Students** | $100/student ($10,000) | Students with school email, no card | [azure.microsoft.com/free/students](https://azure.microsoft.com/en-us/free/students) |
+| Program | Credits | Who Applies | Application URL | Source / Notes |
+|---------|---------|------------|-----------------|----------------|
+| **Google Cloud Teaching Credits** | $50/student ($5,000 total) | UPT or UVT faculty | [edu.google.com/.../teaching](https://edu.google.com/intl/ALL_us/programs/credits/teaching/) | Romania is eligible ([country list](https://support.google.com/google-cloud-higher-ed/answer/10324705)). Faculty frames hackathon as workshop/lab. Credits valid 12 months, must use via [Vertex AI](https://cloud.google.com/vertex-ai) (not AI Studio — [billing change March 2026](https://ai.google.dev/gemini-api/docs/billing)). |
+| **Google Cloud Research Credits** | Up to $5,000 | UPT/UVT professor or PhD student | [edu.google.com/.../research](https://edu.google.com/intl/ALL_us/programs/credits/research/) | Rolling applications, no deadline. "Workshop or training" is explicitly listed as eligible use. |
+| **AWS Educate** | $75-100/student ($7,500-10,000) | Students with school email | [aws.amazon.com/education/awseducate](https://aws.amazon.com/education/awseducate/) | Credits work on [Amazon Bedrock](https://aws.amazon.com/bedrock/) (Claude, Llama, Mistral). [AWS confirmed Activate credits accepted for third-party Bedrock models](https://aws.amazon.com/blogs/startups/aws-activate-credits-now-accepted-for-third-party-models-on-amazon-bedrock/). |
+| **Azure for Students** | $100/student ($10,000) | Students with school email, no card | [azure.microsoft.com/free/students](https://azure.microsoft.com/en-us/free/students) | Gives access to [Azure OpenAI Service](https://azure.microsoft.com/en-us/products/ai-services/openai-service) (GPT-4o). Caveat: Azure OpenAI requires [separate access approval](https://learn.microsoft.com/en-us/azure/ai-services/openai/overview#how-do-i-get-access-to-azure-openai). |
 
 Note: Google Cloud and Azure credits give access to Gemini, GPT-4o, Claude, Mistral, and Llama through their respective AI services (Vertex AI, Azure OpenAI, Bedrock).
 
 ### Layer 4: Technical Distribution (If We Get Bulk Keys)
 
-| Solution | Type | Best For |
-|----------|------|----------|
-| **OpenRouter Provisionary Keys** | SaaS | Simplest — generate temp keys with credit limits, 500+ models, no student accounts needed |
-| **LiteLLM Proxy** | Self-hosted (free) | Maximum control — per-team budgets, 100+ providers, OpenAI-compatible |
-| **Portkey** | SaaS | Real-time dashboards, budget alerts at 80%, rate limiting |
+| Solution | Type | Best For | Source |
+|----------|------|----------|--------|
+| **OpenRouter Provisionary Keys** | SaaS | Simplest — generate temp keys with credit limits, 500+ models, no student accounts needed | [Provisioning docs](https://openrouter.ai/docs/features/provisioning-api-keys), [Goose workshop example](https://block.github.io/goose/blog/2025/07/29/openrouter-unlocks-workshops/) |
+| **LiteLLM Proxy** | Self-hosted (free) | Maximum control — per-team budgets, 100+ providers, OpenAI-compatible | [LiteLLM docs](https://docs.litellm.ai/docs/simple_proxy) |
+| **Portkey** | SaaS | Real-time dashboards, budget alerts at 80%, rate limiting | [Portkey hackathon guide](https://portkey.ai/blog/how-to-host-an-ai-hackathon-without-losing-control-of-your-keys-or-budget/) |
 
 ### Layer 5: Zero-Cost Fallback
 
-- **Local inference with Ollama:** Pre-install on backup machines or USB drives. Phi-4-mini (3.8B, 2.5GB RAM), Llama 3.2 8B (6GB RAM), Mistral 7B (5GB RAM). Works offline, no API keys, no cost.
-- **Nuclear option:** Buy $500 of Gemini Flash-Lite ($0.10/1M input tokens) — covers the entire event at paid rates.
+- **Local inference with Ollama:** Pre-install on backup machines or USB drives. Phi-4-mini (3.8B, 2.5GB RAM), Llama 3.2 8B (6GB RAM), Mistral 7B (5GB RAM). Works offline, no API keys, no cost. [Ollama model library](https://ollama.com/library), [hardware requirements guide](https://www.sitepoint.com/local-llm-hardware-requirements-mac-vs-pc-2026/)
+- **Nuclear option:** Buy $500 of Gemini Flash-Lite ([$0.10/1M input tokens](https://ai.google.dev/gemini-api/docs/pricing)) — covers the entire event at paid rates.
 
 ### Open Questions — Credits
 
