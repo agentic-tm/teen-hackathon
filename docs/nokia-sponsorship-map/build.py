@@ -499,7 +499,7 @@ page(f"""
     <div class="tag">// sponsorship proposal · Timisoara · {DATES}</div>
     <h1>Agentic<br>Hackathon<br><span>human in<br>the loop</span></h1>
     <p class="lead">{PARTICIPANTS} students from western Romania. One weekend. AI agents with a human in control.<br>
-    <b>We ask Nokia to be the Title Partner: {usd(TITLE_TIER)}, decision by {DECISION_BY}.</b></p>
+    We ask <b>Nokia</b> to be the Title Partner: <b>{usd(TITLE_TIER)}</b>.</p>
   </div>
   <div>{loop_diagram(270)}</div>
 </div>

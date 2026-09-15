@@ -1751,10 +1751,11 @@
 			L43.401,538.245z" stroke="#ffffff" stroke-width="2.5"></path>
 	</g>
 </g>
-<text x="232" y="620" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Timis</text>
-<text x="284" y="503" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Arad</text>
-<text x="333" y="766" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Caras-Severin</text>
-<text x="490" y="613" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#ffffff">Hunedoara</text>
-<circle cx="222" cy="660" r="9" fill="#ffffff" stroke="#0a1f44" stroke-width="4"/>
-<text x="240" y="670" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="600" fill="#ffffff">Timisoara</text>
+<text x="284" y="502" text-anchor="middle" font-size="22" font-family="Inter, system-ui, sans-serif" font-weight="700" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Arad</text>
+<text x="490" y="612" text-anchor="middle" font-size="22" font-family="Inter, system-ui, sans-serif" font-weight="700" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Hunedoara</text>
+<text x="339" y="754" text-anchor="middle" font-size="20" font-family="Inter, system-ui, sans-serif" font-weight="700" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Caras-</text>
+<text x="339" y="776" text-anchor="middle" font-size="20" font-family="Inter, system-ui, sans-serif" font-weight="700" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Severin</text>
+<text x="232" y="618" text-anchor="middle" font-size="22" font-family="Inter, system-ui, sans-serif" font-weight="700" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Timis</text>
+<circle cx="210" cy="648" r="8" fill="#ffffff" stroke="#0a1f44" stroke-width="4"/>
+<text x="222" y="655" text-anchor="start" font-size="19" font-weight="600" font-family="Inter, system-ui, sans-serif" fill="#ffffff" stroke="#0a1f44" stroke-width="3" paint-order="stroke" stroke-linejoin="round">Timisoara</text>
 </svg>
