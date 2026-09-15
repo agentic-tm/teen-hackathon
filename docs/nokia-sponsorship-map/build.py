@@ -58,33 +58,16 @@ PRIZES = [
 ]
 PRIZES_TOTAL = sum(v for _, items in PRIZES for _, v in items)
 
-SWAG_ITEMS = [
-    ("T-shirts", PEOPLE_FED + 10, 7),
-    ("Lanyards and badges", PEOPLE_FED + 10, 1.5),
-    ("Stickers", 1, 160),
-]
-SWAG_TOTAL = round(sum(n * p for _, n, p in SWAG_ITEMS))
-
-OTHER = [
-    ("Print and signage", 700, "Four roll-ups, stage banner, posters, room signs"),
-    ("Photo and video", 1000, "Photographer both days, one edited recap video"),
-]
-
-CONTINGENCY_RATE = 0.08
-
 CASH_LINES = [
     ("Developer tooling credits", CREDITS_TOTAL_EUR, f"{'${:,}'.format(CREDITS_TOTAL_USD)}, detailed on page 4"),
     ("Prize pool", PRIZES_TOTAL, "Two tracks plus three special awards"),
-    ("Swag", SWAG_TOTAL, f"T-shirts {PEOPLE_FED + 10} × €7, lanyards and badges, stickers"),
-] + [(l, v, n) for l, v, n in OTHER]
-CASH_SUBTOTAL = sum(v for _, v, _ in CASH_LINES)
-CONTINGENCY = round(CASH_SUBTOTAL * CONTINGENCY_RATE)
-CASH_TOTAL = CASH_SUBTOTAL + CONTINGENCY
+]
+CASH_TOTAL = sum(v for _, v, _ in CASH_LINES)
 
 TITLE_TIER = 25000
-GOLD_TIER = 6500
+GOLD_TIER = 5000
 SILVER_TIER = 2500
-assert TITLE_TIER == CREDITS_TOTAL_EUR + PRIZES_TOTAL, "Title tier must equal credits + prizes"
+assert TITLE_TIER == CASH_TOTAL, "Title tier must equal the cash budget"
 
 # Credit funding scenarios, USD
 SCENARIOS = [
@@ -223,7 +206,7 @@ def timeline_chart(phases, months, width=560, label_w=190, row_h=15, gap=5):
     return "\n".join(out)
 
 
-def split_bar(parts, width=322, bar_h=18):
+def split_bar(parts, width=322, bar_h=18, value_fmt=str):
     """One bar split into labeled segments: (label, value, color)."""
     total = sum(v for _, v, _ in parts)
     h = bar_h + 30
@@ -232,7 +215,7 @@ def split_bar(parts, width=322, bar_h=18):
     for label, v, c in parts:
         w = width * v / total
         out.append(f'<rect x="{x:.1f}" y="0" width="{max(0, w - 2):.1f}" height="{bar_h}" fill="{c}"/>')
-        out.append(f'<text x="{x + 6:.1f}" y="{bar_h * 0.7:.1f}" fill="#fff" font-family="{MONO}" font-size="9" font-weight="600">{v}</text>')
+        out.append(f'<text x="{x + 6:.1f}" y="{bar_h * 0.7:.1f}" fill="#fff" font-family="{MONO}" font-size="9" font-weight="600">{esc(value_fmt(v))}</text>')
         out.append(f'<text x="{x:.1f}" y="{bar_h + 13}" fill="{INK2}">{esc(label)}</text>')
         x += w
     out.append("</svg>")
@@ -422,8 +405,9 @@ svg { display: block; }
 
 /* cover */
 .cover { padding: 14mm 15mm; display: flex; flex-direction: column; }
-.cover .top { display: flex; justify-content: space-between; align-items: center; }
+.cover .top { display: flex; justify-content: space-between; align-items: flex-end; }
 .cover .top .org { display: flex; align-items: center; gap: 5mm; flex: none; }
+.cover .orgblock .k { font-family: __MONOF__; font-size: 7pt; letter-spacing: 0.14em; text-transform: uppercase; color: __MUTED__; margin-bottom: 1.5mm; }
 .cover .top .org img { height: 9mm; }
 .cover .top .org img.agentic { border-radius: 1.6mm; }
 .cover .for { text-align: right; }
@@ -487,7 +471,7 @@ def page(body, cls=""):
 # 1. Cover ------------------------------------------------------------------
 page(f"""
 <div class="top">
-  <div class="org">{logos_html()}</div>
+  <div class="orgblock"><div class="k">Organized by</div><div class="org">{logos_html()}</div></div>
   <div class="right">
     <div class="for"><div class="k">Confirmed sponsor</div><img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
     <div class="for"><div class="k">Prepared for</div><img src="{LOGOS['nokia']}" alt="Nokia"></div>
@@ -576,22 +560,22 @@ mostly from UPT. The {HIGH_SCHOOL} high school students here are the UPT intake 
 """)
 
 # 3. Budget -------------------------------------------------------------------
-budget_rows = [(l, v) for l, v, _ in CASH_LINES] + [("Contingency", CONTINGENCY)]
 page(f"""
 <p class="kicker">02 · Budget</p>
 <h1>Where the money goes: {eur(CASH_TOTAL)}</h1>
-<p class="lead">Sponsors pay for what has to be bought: tooling credits, prizes, and the small lines.
-Venue, food, drinks and beds come from the universities.</p>
+<p class="lead">Two lines, both in front of every participant: the developer tooling each team builds with, and
+the prizes. Everything else comes from the universities, agentic.tm and the other sponsors.</p>
 <div class="cols">
 <div>
-<div class="chart">{hbar_chart(budget_rows, width=322, label_w=132)}</div>
+<div class="chart">{split_bar([("Developer tooling credits", CREDITS_TOTAL_EUR, BLUE), ("Prize pool", PRIZES_TOTAL, NAVY)], width=322, bar_h=22, value_fmt=eur)}</div>
 <table>
 <tr><th>Cash line</th><th class="num">EUR</th></tr>
 {''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{eur(v)}</td></tr>' for l, v, n in CASH_LINES)}
-<tr class="sub"><td>Subtotal</td><td class="num">{eur(CASH_SUBTOTAL)}</td></tr>
-<tr><td>Contingency {int(CONTINGENCY_RATE * 100)}%</td><td class="num">{eur(CONTINGENCY)}</td></tr>
-<tr class="total"><td>Total</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
+<tr class="total"><td>Total, the Title Partner package</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
 </table>
+<h3>Credits per team</h3>
+<div class="chart">{split_bar([("Cursor seats", 80, BLUE), ("Model usage", 100, NAVY), ("Reserve", 20, GREEN)], width=322, value_fmt=usd)}</div>
+<p class="small">{usd(CREDITS_PER_PERSON_USD * TEAM_SIZE)} per team of two, {TEAMS} teams. The split and the funding scenarios are on page 4.</p>
 </div>
 <div>
 <h3 style="margin-top:0">Prize pool: {eur(PRIZES_TOTAL)}, per team of two</h3>
@@ -604,6 +588,7 @@ Nokia's judges hand out the Nokia Challenge Award.</p>
   <div><b>Food and drinks</b>UPT and UVT, six meals plus coffee, water, snacks for {PEOPLE_FED} people</div>
   <div><b>Accommodation</b>UPT dorms for out-of-town participants</div>
   <div><b>Design and mentoring</b>agentic.tm, {MENTORS} mentors, identity, site, media</div>
+  <div><b>Swag, print, photo and video</b>agentic.tm with Gold and Silver sponsors</div>
 </div>
 </div>
 </div>
@@ -676,7 +661,7 @@ page(f"""
   <div class="tier">
     <div class="name">Gold</div>
     <div class="price">{eur(GOLD_TIER)}</div>
-    <div class="funds">One slot. Everything the Title package does not cover: swag, print, media, contingency.</div>
+    <div class="funds">One slot. Swag, print, photo and video, on top of the Title package.</div>
     <ul>
       <li>30-minute Saturday workshop</li>
       <li>Two mentors, one jury seat</li>
@@ -697,12 +682,12 @@ page(f"""
   </div>
 </div>
 <h2>How the budget closes</h2>
-<div class="chart">{stacked_hbar_chart([("Cash budget", [("Nokia, Title", TITLE_TIER), ("Gold ×1", CASH_TOTAL - TITLE_TIER)])], [BLUE, AMBER], width=560, label_w=100, value_fmt=eur)}</div>
 <div class="cols">
 <div>
-<p>Nokia's {eur(TITLE_TIER)} is {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the remaining {eur(CASH_TOTAL - TITLE_TIER)}.</p>
+<p>Nokia's {eur(TITLE_TIER)} is the whole cash budget: credits and prizes. Gold and Silver sponsors add swag, print,
+photo and video on top, outside this budget.</p>
 <div class="sponsor-tile"><img src="{LOGOS['spacexai']}" alt="SpaceXAI"><div><b>Confirmed sponsor.</b> Package being finalized, not yet counted above.
-Whatever it and the credit programs bring lowers the Gold slot and the credits line, and is reported back to Nokia.</div></div>
+Whatever it and the credit programs bring lowers the credits line and is reported back to Nokia.</div></div>
 </div>
 <div>
 <div class="callout" style="margin-top:0"><p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY},
@@ -748,7 +733,7 @@ page(f"""
 <tr><td>No provider grants credits</td><td>The budget already assumes it. Free tiers keep every team building.</td></tr>
 <tr><td>Venue falls through</td><td>UVT's campus, same weekend. No sponsor money is spent before the booking is signed.</td></tr>
 <tr><td>Minors and accounts</td><td>Organizers create every seat; no student signs a contract or enters a card. Consent forms, a teacher per school group, medical assistance on site.</td></tr>
-<tr><td>Fewer participants</td><td>Swag and credits scale with headcount; unspent money is reported and returned.</td></tr>
+<tr><td>Fewer participants</td><td>Credits scale with headcount; unspent money is reported and returned.</td></tr>
 </table>
 <div class="callout">
 <p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
