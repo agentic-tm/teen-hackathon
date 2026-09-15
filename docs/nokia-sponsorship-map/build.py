@@ -49,11 +49,11 @@ CREDITS = [
 
 # Prizes, EUR, per team of two
 PRIZES = [
-    ("High school track", [("1st place", 1500), ("2nd place", 1000), ("3rd place", 500)]),
-    ("University track", [("1st place", 1500), ("2nd place", 1000), ("3rd place", 500)]),
-    ("Special awards", [("Nokia Challenge Award", 1000),
-                        ("Best human-in-the-loop", 400),
-                        ("Community choice", 400)]),
+    ("High school track", [("1st place", 1000), ("2nd place", 600), ("3rd place", 400)]),
+    ("University track", [("1st place", 1000), ("2nd place", 600), ("3rd place", 400)]),
+    ("Special awards", [("Nokia Challenge Award", 600),
+                        ("Best human-in-the-loop", 200),
+                        ("Community choice", 200)]),
 ]
 PRIZES_TOTAL = sum(v for _, items in PRIZES for _, v in items)
 
@@ -75,7 +75,7 @@ SCENARIOS = [
     ("C. Cursor grants $50 each", [("Cursor credits", 50 * PARTICIPANTS)]),
 ]
 
-DATES = "Friday 27 to Sunday 29 November 2026"
+DATES = "27-29 November 2026"
 VENUE = "UPT, Faculty of Automation and Computers, Bd. Vasile Parvan 2, Timisoara"
 DECISION_BY = "15 October 2026"
 
@@ -114,6 +114,7 @@ LOGOS = {
     "uvt": data_uri(ASSETS / "uvt-logo.svg", "image/svg+xml"),
     "nokia": data_uri(ASSETS / "nokia-logo.svg", "image/svg+xml"),
     "spacexai": data_uri(ASSETS / "spacexai-full-logo.svg", "image/svg+xml"),
+    "map": data_uri(ASSETS / "west-romania.svg", "image/svg+xml"),
 }
 FONTS = {
     "inter": data_uri(ASSETS / "fonts" / "Inter.woff2", "font/woff2"),
@@ -214,7 +215,8 @@ def split_bar(parts, width=322, bar_h=18, value_fmt=str):
         w = width * v / total
         out.append(f'<rect x="{x:.1f}" y="0" width="{max(0, w - 2):.1f}" height="{bar_h}" fill="{c}"/>')
         out.append(f'<text x="{x + 6:.1f}" y="{bar_h * 0.7:.1f}" fill="#fff" font-family="{MONO}" font-size="9" font-weight="600">{esc(value_fmt(v))}</text>')
-        out.append(f'<text x="{x:.1f}" y="{bar_h + 13}" fill="{INK2}">{esc(label)}</text>')
+        last = (label, v, c) == parts[-1]
+        out.append(f'<text x="{width if last else x:.1f}" y="{bar_h + 13}" text-anchor="{"end" if last else "start"}" fill="{INK2}">{esc(label)}</text>')
         x += w
     out.append("</svg>")
     return "\n".join(out)
@@ -228,15 +230,16 @@ def schedule_chart(width=322):
         ("Sun 29", [(0, 12, "hacking", BLUE), (12, 16, "12:00 freeze · 13:00 demos · 15:30 awards", GREEN)]),
     ]
     label_w = 44
-    row_h = 16
-    gap = 14
+    row_h = 18
+    gap = 16
     top = 12
     plot_w = width - label_w - 4
     h = top + len(days) * (row_h + gap)
     out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8">']
     for hr in (0, 6, 12, 18, 24):
         x = label_w + plot_w * hr / 24
-        out.append(f'<text x="{x:.1f}" y="8" text-anchor="middle" fill="{MUTED}" font-family="{MONO}" font-size="7">{hr:02d}:00</text>')
+        anchor = "end" if hr == 24 else ("start" if hr == 0 else "middle")
+        out.append(f'<text x="{x:.1f}" y="8" text-anchor="{anchor}" fill="{MUTED}" font-family="{MONO}" font-size="7">{hr:02d}:00</text>')
         out.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{h - gap + 2}" stroke="{GRID}" stroke-width="1"/>')
     y = top + 2
     for d, blocks in days:
@@ -385,17 +388,18 @@ svg { display: block; }
 .chart { margin: 1mm 0 3mm 0; }
 
 .benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; margin: 1mm 0 3mm 0; }
-.benefits .b { background: __WASH__; border-radius: 2mm; padding: 2.4mm 3mm; border-left: 2.5px solid __BLUE__; }
+.benefits .b { background: __WASH__; border-radius: 2mm; padding: 3mm 3.2mm; border-left: 2.5px solid __BLUE__; }
 .benefits .t { font-family: __MONOF__; font-weight: 600; font-size: 8.6pt; color: __NAVY__; }
 .benefits .d { font-size: 7.8pt; color: __INK2__; line-height: 1.3; margin-top: 0.6mm; }
-.briefs { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin: 1mm 0 2.5mm 0; }
-.brief { border: 1px solid __GRID__; border-radius: 2mm; padding: 2.5mm 3mm; font-size: 8pt; color: __INK2__; line-height: 1.35; }
+.briefs { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; margin: 1mm 0 2.5mm 0; }
+.brief { border: 1px solid __GRID__; border-radius: 2mm; padding: 3mm 4mm; font-size: 8.6pt; color: __INK2__; line-height: 1.35; }
 .brief b { display: block; color: __INK__; margin-bottom: 1mm; }
-.orgrow { display: flex; align-items: center; gap: 5mm; margin: 1.5mm 0 2mm 0; }
-.orgrow img { height: 5.5mm; }
-.orgrow img.sx { height: 3.4mm; }
+.orgrow { display: flex; align-items: center; gap: 7mm; margin: 1.5mm 0 2.5mm 0; }
+.orgrow img { height: 7mm; }
+.orgrow img.sx { height: 4.2mm; }
 .orgrow img.agentic { border-radius: 1.2mm; }
-.covered { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+.covered { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-top: 2mm; }
+.map { width: 80%; display: block; margin: 1mm auto 2mm auto; }
 .covered div { background: __WASH__; border-radius: 2mm; padding: 2.4mm 3mm; font-size: 7.8pt; color: __INK2__; line-height: 1.3; }
 .covered b { display: block; font-family: __MONOF__; font-size: 8pt; color: __NAVY__; margin-bottom: 0.6mm; }
 .sponsor-tile { display: flex; flex-direction: column; gap: 2.5mm; align-items: flex-start; border: 1px solid __GRID__; border-radius: 2mm; padding: 3mm 3.5mm; font-size: 8.4pt; color: __INK2__; }
@@ -419,7 +423,8 @@ svg { display: block; }
 .cover .toc b { display: block; font-family: __MONOF__; font-size: 8pt; color: __BLUE__; margin-bottom: 0.8mm; }
 .cover h1 { font-size: 34pt; line-height: 1.02; letter-spacing: -0.03em; margin: 0 0 5mm 0; }
 .cover h1 span { color: __BLUE__; }
-.cover .lead { font-size: 12pt; color: __INK2__; max-width: 110mm; }
+.cover .lead { font-size: 11.5pt; color: __INK2__; max-width: 110mm; line-height: 1.45; }
+.cover .lead b { color: __INK__; }
 .cover .tag { font-family: __MONOF__; font-size: 8.5pt; color: __BLUE__; font-weight: 500; margin-bottom: 4mm; }
 .cover .band { margin-top: auto; background: __NAVY__; color: #fff; border-radius: 3mm; padding: 6mm 7mm; }
 .cover .band .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; }
@@ -453,9 +458,9 @@ pages = []
 
 
 def logos_html(cls=""):
-    return (f'<img class="agentic" src="{LOGOS["agentic"]}" alt="agentic.tm">'
-            f'<img src="{LOGOS["upt"]}" alt="UPT">'
-            f'<img src="{LOGOS["uvt"]}" alt="UVT">')
+    return (f'<img src="{LOGOS["upt"]}" alt="UPT">'
+            f'<img src="{LOGOS["uvt"]}" alt="UVT">'
+            f'<img class="agentic" src="{LOGOS["agentic"]}" alt="agentic.tm">')
 
 
 def page(body, cls=""):
@@ -477,10 +482,10 @@ page(f"""
 </div>
 <div class="hero">
   <div>
-    <div class="tag">// sponsorship proposal · Timisoara · 27-29 Nov 2026</div>
+    <div class="tag">// sponsorship proposal · Timisoara · {DATES}</div>
     <h1>Agentic<br>Hackathon<br><span>human in<br>the loop</span></h1>
-    <p class="lead">{PARTICIPANTS} high school and university students from western Romania spend a weekend
-    building AI agents that keep a person in control. We propose Nokia as the Title Partner.</p>
+    <p class="lead">{PARTICIPANTS} students from western Romania. One weekend. AI agents with a human in control.<br>
+    <b>We ask Nokia to be the Title Partner: {eur(TITLE_TIER)}, decision by {DECISION_BY}.</b></p>
   </div>
   <div>{loop_diagram(270)}</div>
 </div>
@@ -499,7 +504,7 @@ page(f"""
     <div><div class="v">{eur(TITLE_TIER)}</div><div class="l">proposed Title Partner<br>package for Nokia</div></div>
   </div>
   <div class="meta">
-    <div><b>Organizers</b>agentic.tm · UPT · UVT</div>
+    <div><b>Organizers</b>UPT · UVT · agentic.tm</div>
     <div><b>Date</b>{DATES}</div>
     <div><b>Venue</b>{VENUE}</div>
   </div>
@@ -526,16 +531,12 @@ page(f"""
 <p>Teams build agents that reason, plan and act, with a person approving the steps that matter. The agent
 proposes, the human decides. Cursor with frontier models, any stack, a working demo by Sunday noon.</p>
 <h3>Who is in the room</h3>
-<div class="chart">{split_bar([("High school students, grades 9 to 12", HIGH_SCHOOL, BLUE), ("University students, UPT and UVT", UNIVERSITY, NAVY)], width=322)}</div>
-<p class="small">From Timis, Arad, Caras-Severin and Hunedoara. Free to enter. Minors come with parental consent and a
-teacher per school group. Two judging tracks, so a 15-year-old is not scored against a third-year student.</p>
+<div class="chart">{split_bar([("High school students, grades 9 to 12", HIGH_SCHOOL, BLUE), ("University students", UNIVERSITY, NAVY)], width=322, bar_h=22)}</div>
+<img class="map" src="{LOGOS['map']}" alt="Western Romania: Timis, Arad, Caras-Severin, Hunedoara">
+<p class="small">Four counties: Timis, Arad, Caras-Severin, Hunedoara. Free to enter. Minors come with parental consent
+and a teacher per school group. Two judging tracks, so a 15-year-old is not scored against a third-year student.</p>
 <h3>The weekend</h3>
 <div class="chart">{schedule_chart(width=322)}</div>
-<h3>Organizers and partners</h3>
-<div class="orgrow">{logos_html()}<img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
-<p class="small">agentic.tm, Timisoara's agentic AI community, runs the program and brings mentors and sponsors.
-UPT hosts and houses the participants; UPT and UVT feed them and add faculty mentors and judges.
-SpaceXAI has confirmed sponsorship.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
@@ -545,16 +546,23 @@ SpaceXAI has confirmed sponsorship.</p>
 <div class="callout"><p><b>Why Nokia Timisoara.</b> About 1,300 people on campus, 600 of them R&amp;D engineers, hired
 mostly from UPT. The {HIGH_SCHOOL} high school students here are the UPT intake of 2027 to 2029; the
 {UNIVERSITY} university students are hires of 2027.</p></div>
-<h3>Nokia Challenge: pick one brief</h3>
+</div>
+</div>
+<h2 style="margin-top:4mm">Nokia Challenge: {TEAMS} teams on a Nokia problem, one weekend</h2>
 <div class="briefs">
-  <div class="brief"><b>Incident triage with approval</b>An agent reads alarms and logs from a simulated network,
-  proposes a diagnosis and a fix, and waits for an engineer to approve.</div>
-  <div class="brief"><b>Configuration review</b>An agent reviews a proposed change, explains the risk in plain
-  language, and asks the one question that decides it.</div>
+  <div class="brief"><b>The on-call co-pilot</b>Alarms and logs stream in from a simulated 5G network. The agent
+  triages, finds the likely cause, drafts the fix, and the engineer approves it with one click. What Nokia's
+  operations centre in Timisoara does by hand today, with a human still holding the pen.</div>
+  <div class="brief"><b>Ask the network</b>An engineer types "why is this cell degraded since 3 am?" The agent
+  works through telemetry and configuration, answers with evidence, and proposes a change that waits for sign-off.
+  A plain-language front end to network data.</div>
 </div>
-<p class="small">Nothing runs on Nokia infrastructure: laptops and the providers' APIs only.</p>
+<div class="benefits" style="grid-template-columns:1fr 1fr 1fr">
+  <div class="b"><div class="t">Nokia writes the brief</div><div class="d">and the simulated data; we build the starter kit</div></div>
+  <div class="b"><div class="t">Nokia judges it</div><div class="d">and hands out the Nokia Challenge Award</div></div>
+  <div class="b"><div class="t">Nokia keeps the results</div><div class="d">prototypes, write-ups, and a shortlist of the teams to recruit</div></div>
 </div>
-</div>
+<p class="small">Nothing runs on Nokia infrastructure: participants' laptops and the providers' APIs only.</p>
 """)
 
 # 3. Budget -------------------------------------------------------------------
@@ -581,15 +589,21 @@ scenarios on page 4.</p>
 <div class="chart">{grouped_prize_chart(PRIZES, width=322)}</div>
 <p class="small">High school winners get vouchers, which avoids tax and guardianship paperwork for minors.
 Nokia's judges hand out the Nokia Challenge Award.</p>
-<h3>Covered by the partners</h3>
-<div class="covered">
+<h3>Per participant</h3>
+<div class="cols3">
+  <div class="tile"><div class="v">{eur(CASH_TOTAL / PARTICIPANTS)}</div><div class="l">of sponsor money per participant</div></div>
+  <div class="tile"><div class="v">${SEAT_USD}</div><div class="l">Cursor seat each, plus the shared reserve</div></div>
+  <div class="tile"><div class="v">{sum(len(i) for _, i in PRIZES)}</div><div class="l">awards across two tracks</div></div>
+</div>
+</div>
+</div>
+<h2 style="margin-top:5mm">Covered by the partners, outside this budget</h2>
+<div class="covered" style="grid-template-columns:repeat(5, 1fr)">
   <div><b>Venue</b>UPT, Faculty of Automation and Computers</div>
   <div><b>Food and drinks</b>UPT and UVT, six meals plus coffee, water, snacks for {PEOPLE_FED} people</div>
   <div><b>Accommodation</b>UPT dorms for out-of-town participants</div>
   <div><b>Design and mentoring</b>agentic.tm, {MENTORS} mentors, identity, site, media</div>
   <div><b>Swag, print, photo and video</b>agentic.tm with Gold and Silver sponsors</div>
-</div>
-</div>
 </div>
 """)
 
@@ -740,6 +754,11 @@ brief by {DECISION_BY}. We send the one-page agreement the same week.</p>
 </div>
 </div>
 </div>
+<h2 style="margin-top:5mm">Organizers and partners</h2>
+<div class="orgrow">{logos_html()}<img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
+<p class="small">UPT hosts the event and houses the participants. UPT and UVT feed them and add faculty mentors and
+judges. agentic.tm, Timisoara's agentic AI community, runs the program and brings mentors and sponsors.
+SpaceXAI has confirmed sponsorship.</p>
 """)
 
 assert len(pages) == TOTAL_PAGES, f"expected {TOTAL_PAGES} pages, got {len(pages)}"
