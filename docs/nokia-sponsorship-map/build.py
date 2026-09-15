@@ -341,7 +341,7 @@ svg { display: block; }
 .cover .band .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; }
 .cover .band .v { font-family: __MONOF__; font-size: 19pt; font-weight: 600; line-height: 1; }
 .cover .band .l { font-size: 7.8pt; color: #b9c6e0; margin-top: 1.5mm; line-height: 1.3; }
-.cover .band .meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; margin-top: 6mm; padding-top: 4mm; border-top: 1px solid rgba(255,255,255,0.18); font-size: 8pt; color: #b9c6e0; }
+.cover .band .meta { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 5mm; margin-top: 6mm; padding-top: 4mm; border-top: 1px solid rgba(255,255,255,0.18); font-size: 8pt; color: #b9c6e0; }
 .cover .band .meta b { display: block; color: #fff; font-family: __MONOF__; font-weight: 500; font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1mm; }
 
 /* tiers */
@@ -391,7 +391,7 @@ page(f"""
 <div class="hero">
   <div>
     <div class="tag">// sponsorship proposal · Timisoara · 27-29 Nov 2026</div>
-    <h1>Agentic<br>Programming<br>Hackathon<br><span>human in the loop</span></h1>
+    <h1>Agentic<br>Hackathon<br><span>human in<br>the loop</span></h1>
     <p class="lead">{PARTICIPANTS} high school and university students from western Romania spend a weekend
     building AI agents that keep a person in control. We propose Nokia as the Title Partner.</p>
   </div>
@@ -415,6 +415,7 @@ page(f"""
     <div><b>Organizers</b>agentic.tm · Politehnica University of Timisoara · West University of Timisoara</div>
     <div><b>Date</b>{DATES}</div>
     <div><b>Venue</b>{VENUE}. Meals, drinks and dorm rooms provided by UPT and UVT.</div>
+    <div><b>Sponsors</b>SpaceXAI, confirmed. Nokia, proposed Title Partner.</div>
   </div>
 </div>
 """, "cover")
@@ -452,7 +453,7 @@ group. High school and university teams are judged separately.</p>
 monthly meetups since October 2025. It brings the program, the mentors and the sponsors.
 <b>UPT</b> hosts the event at the Faculty of Automation and Computers on Bd. Vasile Parvan and houses
 out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> together cover food and drinks for the whole
-weekend and provide faculty mentors and judges.</p>
+weekend and provide faculty mentors and judges. <b>SpaceXAI</b> has confirmed it sponsors the event.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
@@ -620,8 +621,9 @@ page(f"""
 <div class="cols">
 <div>
 <p>Nokia's {eur(TITLE_TIER)} covers {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the
-remaining {eur(CASH_TOTAL - TITLE_TIER)}; that conversation runs in parallel with this one. Any credit program approval
-lowers the credits line and is reported back to Nokia as surplus.</p>
+remaining {eur(CASH_TOTAL - TITLE_TIER)}. SpaceXAI has already confirmed sponsorship; its package is being finalized
+and is not counted above. Whatever it and the credit programs bring lowers the Gold slot and the credits line, and is
+reported back to Nokia as surplus.</p>
 </div>
 <div>
 <p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY}. On a yes,
@@ -636,6 +638,7 @@ entity: {eur(TITLE_TIER // 2)} on signing in October, {eur(TITLE_TIER // 2)} in 
 <tr><td>Gold sponsor</td><td>Swag, print, photo and video, mentor and judge costs, safety, website, contingency</td><td class="num">{eur(CASH_TOTAL - TITLE_TIER)}</td></tr>
 <tr><td>UPT and UVT, in kind</td><td>Venue, food and drinks, dorm rooms</td><td class="num">{eur(4500 + FOOD_TOTAL + 3600)}</td></tr>
 <tr><td>agentic.tm, in kind</td><td>Identity, site, media graphics, mentoring</td><td class="num">{eur(IN_KIND_TOTAL - 4500 - FOOD_TOTAL - 3600)}</td></tr>
+<tr><td>SpaceXAI, confirmed sponsor</td><td>Package being finalized</td><td class="num">tbd</td></tr>
 </table>
 
 """)
@@ -696,7 +699,7 @@ assert len(pages) == TOTAL_PAGES, f"expected {TOTAL_PAGES} pages, got {len(pages
 # ---------------------------------------------------------------- WRITE -----
 doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<title>Agentic Programming Hackathon Timisoara: sponsorship proposal for Nokia</title>
+<title>Agentic Hackathon: human in the loop. Sponsorship proposal for Nokia</title>
 <style>{CSS}</style></head>
 <body>
 {''.join(pages)}
