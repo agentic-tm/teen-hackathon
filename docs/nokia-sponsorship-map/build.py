@@ -50,10 +50,10 @@ CREDITS_TOTAL_EUR = round(CREDITS_TOTAL_USD * USD_EUR)
 
 # Prizes, EUR, per team of two
 PRIZES = [
-    ("High school track", [("1st", 1500), ("2nd", 1000), ("3rd", 500)]),
-    ("University track", [("1st", 1500), ("2nd", 1000), ("3rd", 500)]),
+    ("High school track", [("1st place", 1500), ("2nd place", 1000), ("3rd place", 500)]),
+    ("University track", [("1st place", 1500), ("2nd place", 1000), ("3rd place", 500)]),
     ("Special awards", [("Nokia Challenge Award", 1000),
-                        ("Best human-in-the-loop design", 400),
+                        ("Best human-in-the-loop", 400),
                         ("Community choice", 400)]),
 ]
 PRIZES_TOTAL = sum(v for _, items in PRIZES for _, v in items)
@@ -68,9 +68,6 @@ SWAG_TOTAL = round(sum(n * p for _, n, p in SWAG_ITEMS))
 OTHER = [
     ("Print and signage", 700, "Four roll-ups, stage banner, posters, room signs"),
     ("Photo and video", 1000, "Photographer both days, one edited recap video"),
-    ("Mentor and judge costs", 600, "Travel for out-of-town mentors, thank-you gifts"),
-    ("Safety and first aid", 500, "Medical assistance on site, consent forms for minors"),
-    ("Website and registration", 150, "Domain, hosting, registration and submissions"),
 ]
 
 CONTINGENCY_RATE = 0.08
@@ -85,7 +82,7 @@ CONTINGENCY = round(CASH_SUBTOTAL * CONTINGENCY_RATE)
 CASH_TOTAL = CASH_SUBTOTAL + CONTINGENCY
 
 TITLE_TIER = 25000
-GOLD_TIER = 8000
+GOLD_TIER = 6500
 SILVER_TIER = 2500
 assert TITLE_TIER == CREDITS_TOTAL_EUR + PRIZES_TOTAL, "Title tier must equal credits + prizes"
 
@@ -308,6 +305,27 @@ def grouped_hbar(rows, colors, width=322, label_w=80, bar_h=8, gap=3, group_gap=
     return "\n".join(out)
 
 
+def grouped_prize_chart(groups, width=322, bar_h=11, gap=5, label_w=120):
+    """Bars grouped under a header per track: (track, [(award, value), ...])."""
+    max_v = max(v for _, items in groups for _, v in items)
+    plot_w = width - label_w - 60
+    h = sum(14 + len(items) * (bar_h + gap) + 6 for _, items in groups)
+    out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8.5">']
+    y = 0
+    for track, items in groups:
+        out.append(f'<text x="0" y="{y + 9}" fill="{NAVY}" font-family="{MONO}" font-size="7.5" font-weight="600">{esc(track.upper())}</text>')
+        y += 14
+        for award, v in items:
+            w = plot_w * v / max_v
+            out.append(f'<text x="{label_w - 8}" y="{y + bar_h * 0.78:.1f}" text-anchor="end" fill="{INK2}">{esc(award)}</text>')
+            out.append(f'<rect x="{label_w}" y="{y}" width="{w:.1f}" height="{bar_h}" fill="{BLUE}" rx="1.5"/>')
+            out.append(f'<text x="{label_w + w + 5:.1f}" y="{y + bar_h * 0.78:.1f}" fill="{INK}" font-family="{MONO}" font-size="8.5">{eur(v)}</text>')
+            y += bar_h + gap
+        y += 6
+    out.append("</svg>")
+    return "\n".join(out)
+
+
 def loop_diagram(size=270):
     """Human-in-the-loop ring: agent proposes, human decides, agent acts."""
     import math
@@ -526,7 +544,7 @@ page(f"""
 <p>Teams build agents that reason, plan and act, with a person approving the steps that matter. The agent
 proposes, the human decides. Cursor with frontier models, any stack, a working demo by Sunday noon.</p>
 <h3>Who is in the room</h3>
-<div class="chart">{split_bar([("High school, grades 9 to 12", HIGH_SCHOOL, BLUE), ("University, UPT and UVT", UNIVERSITY, NAVY)], width=322)}</div>
+<div class="chart">{split_bar([("High school students, grades 9 to 12", HIGH_SCHOOL, BLUE), ("University students, UPT and UVT", UNIVERSITY, NAVY)], width=322)}</div>
 <p class="small">From Timis, Arad, Caras-Severin and Hunedoara. Free to enter. Minors come with parental consent and a
 teacher per school group. Two judging tracks, so a 15-year-old is not scored against a third-year student.</p>
 <h3>The weekend</h3>
@@ -559,7 +577,6 @@ mostly from UPT. The {HIGH_SCHOOL} high school students here are the UPT intake 
 
 # 3. Budget -------------------------------------------------------------------
 budget_rows = [(l, v) for l, v, _ in CASH_LINES] + [("Contingency", CONTINGENCY)]
-prize_rows = [(a if t == "Special awards" else t.replace(" track", "") + " " + a, v) for t, items in PRIZES for a, v in items]
 page(f"""
 <p class="kicker">02 · Budget</p>
 <h1>Where the money goes: {eur(CASH_TOTAL)}</h1>
@@ -578,7 +595,7 @@ Venue, food, drinks and beds come from the universities.</p>
 </div>
 <div>
 <h3 style="margin-top:0">Prize pool: {eur(PRIZES_TOTAL)}, per team of two</h3>
-<div class="chart">{hbar_chart(prize_rows, width=322, label_w=150, bar_h=12, gap=6)}</div>
+<div class="chart">{grouped_prize_chart(PRIZES, width=322)}</div>
 <p class="small">High school winners get vouchers, which avoids tax and guardianship paperwork for minors.
 Nokia's judges hand out the Nokia Challenge Award.</p>
 <h3>Covered by the partners</h3>
@@ -659,7 +676,7 @@ page(f"""
   <div class="tier">
     <div class="name">Gold</div>
     <div class="price">{eur(GOLD_TIER)}</div>
-    <div class="funds">One slot. Swag, print, media, safety, website, contingency.</div>
+    <div class="funds">One slot. Everything the Title package does not cover: swag, print, media, contingency.</div>
     <ul>
       <li>30-minute Saturday workshop</li>
       <li>Two mentors, one jury seat</li>
@@ -683,7 +700,7 @@ page(f"""
 <div class="chart">{stacked_hbar_chart([("Cash budget", [("Nokia, Title", TITLE_TIER), ("Gold ×1", CASH_TOTAL - TITLE_TIER)])], [BLUE, AMBER], width=560, label_w=100, value_fmt=eur)}</div>
 <div class="cols">
 <div>
-<p>Nokia's {eur(TITLE_TIER)} is {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the rest.</p>
+<p>Nokia's {eur(TITLE_TIER)} is {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the remaining {eur(CASH_TOTAL - TITLE_TIER)}.</p>
 <div class="sponsor-tile"><img src="{LOGOS['spacexai']}" alt="SpaceXAI"><div><b>Confirmed sponsor.</b> Package being finalized, not yet counted above.
 Whatever it and the credit programs bring lowers the Gold slot and the credits line, and is reported back to Nokia.</div></div>
 </div>
