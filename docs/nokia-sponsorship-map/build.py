@@ -48,16 +48,6 @@ CREDITS_PER_PERSON_USD = sum(v for _, v, _ in CREDITS)
 CREDITS_TOTAL_USD = CREDITS_PER_PERSON_USD * PARTICIPANTS
 CREDITS_TOTAL_EUR = round(CREDITS_TOTAL_USD * USD_EUR)
 
-# Food, EUR per person, Friday evening to Sunday afternoon
-MEALS = [
-    ("Breakfast ×2", 2, 6),
-    ("Lunch ×2", 2, 11),
-    ("Dinner ×2", 2, 9),
-    ("Coffee, water, snacks", 1, 12),
-]
-FOOD_PER_PERSON = sum(n * p for _, n, p in MEALS)
-FOOD_TOTAL = FOOD_PER_PERSON * PEOPLE_FED
-
 # Prizes, EUR, per team of two
 PRIZES = [
     ("High school track", [("1st", 1500), ("2nd", 1000), ("3rd", 500)]),
@@ -86,22 +76,13 @@ OTHER = [
 CONTINGENCY_RATE = 0.08
 
 CASH_LINES = [
-    ("Developer tooling credits", CREDITS_TOTAL_EUR, f"{'${:,}'.format(CREDITS_TOTAL_USD)} at {USD_EUR} EUR/USD, page 4"),
+    ("Developer tooling credits", CREDITS_TOTAL_EUR, f"{'${:,}'.format(CREDITS_TOTAL_USD)}, detailed on page 4"),
     ("Prize pool", PRIZES_TOTAL, "Two tracks plus three special awards"),
     ("Swag", SWAG_TOTAL, f"T-shirts {PEOPLE_FED + 10} × €7, lanyards and badges, stickers"),
 ] + [(l, v, n) for l, v, n in OTHER]
 CASH_SUBTOTAL = sum(v for _, v, _ in CASH_LINES)
 CONTINGENCY = round(CASH_SUBTOTAL * CONTINGENCY_RATE)
 CASH_TOTAL = CASH_SUBTOTAL + CONTINGENCY
-
-IN_KIND = [
-    ("Venue: amphitheatre, labs, network", "UPT", 4500),
-    ("Food and drinks, six meals plus coffee, water, snacks", "UPT / UVT", FOOD_TOTAL),
-    ("Dorm rooms for out-of-town participants", "UPT", 3600),
-    ("Identity, site, media graphics", "agentic.tm", 2500),
-    ("Mentoring, 10 mentors, two days", "agentic.tm, UPT, UVT", 10000),
-]
-IN_KIND_TOTAL = sum(v for _, _, v in IN_KIND)
 
 TITLE_TIER = 25000
 GOLD_TIER = 8000
@@ -154,6 +135,7 @@ LOGOS = {
     "upt": data_uri(ASSETS / "upt-logo.svg", "image/svg+xml"),
     "uvt": data_uri(ASSETS / "uvt-logo.svg", "image/svg+xml"),
     "nokia": data_uri(ASSETS / "nokia-logo.svg", "image/svg+xml"),
+    "spacexai": data_uri(ASSETS / "spacexai-full-logo.svg", "image/svg+xml"),
 }
 FONTS = {
     "inter": data_uri(ASSETS / "fonts" / "Inter.woff2", "font/woff2"),
@@ -244,6 +226,81 @@ def timeline_chart(phases, months, width=560, label_w=190, row_h=15, gap=5):
     return "\n".join(out)
 
 
+def split_bar(parts, width=322, bar_h=18):
+    """One bar split into labeled segments: (label, value, color)."""
+    total = sum(v for _, v, _ in parts)
+    h = bar_h + 30
+    out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8.5">']
+    x = 0
+    for label, v, c in parts:
+        w = width * v / total
+        out.append(f'<rect x="{x:.1f}" y="0" width="{max(0, w - 2):.1f}" height="{bar_h}" fill="{c}"/>')
+        out.append(f'<text x="{x + 6:.1f}" y="{bar_h * 0.7:.1f}" fill="#fff" font-family="{MONO}" font-size="9" font-weight="600">{v}</text>')
+        out.append(f'<text x="{x:.1f}" y="{bar_h + 13}" fill="{INK2}">{esc(label)}</text>')
+        x += w
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def schedule_chart(width=322):
+    """Friday 17:00 to Sunday 16:00 as one strip per day, with the named moments."""
+    days = [("Fri 27", 17, 24), ("Sat 28", 0, 24), ("Sun 29", 0, 16)]
+    marks = [(0, 17, "opening, Nokia keynote"), (0, 19, "hacking starts"), (1, 10, "workshops, mentor hours"),
+             (2, 12, "code freeze"), (2, 13, "demos"), (2, 15.5, "awards")]
+    label_w = 44
+    row_h = 14
+    gap = 30
+    plot_w = width - label_w - 4
+    h = len(days) * (row_h + gap) + 4
+    out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8">']
+    y = 2
+    for i, (d, a, b) in enumerate(days):
+        out.append(f'<text x="{label_w - 8}" y="{y + row_h * 0.75:.1f}" text-anchor="end" fill="{INK2}" font-family="{MONO}">{d}</text>')
+        out.append(f'<rect x="{label_w}" y="{y}" width="{plot_w}" height="{row_h}" fill="{GRID}" rx="2"/>')
+        x1 = label_w + plot_w * a / 24
+        x2 = label_w + plot_w * b / 24
+        out.append(f'<rect x="{x1:.1f}" y="{y}" width="{x2 - x1:.1f}" height="{row_h}" fill="{BLUE}" rx="2"/>')
+        k = 0
+        for di, hr, txt in marks:
+            if di != i:
+                continue
+            mx = label_w + plot_w * hr / 24
+            ty = y + row_h + 11 + 10 * k
+            out.append(f'<line x1="{mx:.1f}" y1="{y}" x2="{mx:.1f}" y2="{ty - 8}" stroke="{NAVY}" stroke-width="1.5"/>')
+            out.append(f'<text x="{mx + 3:.1f}" y="{ty}" fill="{INK2}">{esc(txt)}</text>')
+            k += 1
+        y += row_h + gap
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def grouped_hbar(rows, colors, width=322, label_w=80, bar_h=8, gap=3, group_gap=8):
+    """rows: (label, [(series, value), ...]) drawn as thin bars per group with a legend."""
+    series = [s for s, _ in rows[0][1]]
+    max_v = max(v for _, segs in rows for _, v in segs)
+    plot_w = width - label_w - 50
+    n = len(series)
+    gh = n * bar_h + (n - 1) * gap
+    h = len(rows) * (gh + group_gap) + 18
+    out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8.5">']
+    y = 0
+    for label, segs in rows:
+        out.append(f'<text x="{label_w - 8}" y="{y + gh / 2 + 3:.1f}" text-anchor="end" fill="{INK2}">{esc(label)}</text>')
+        for k, (sname, v) in enumerate(segs):
+            w = plot_w * v / max_v
+            yy = y + k * (bar_h + gap)
+            out.append(f'<rect x="{label_w}" y="{yy}" width="{w:.1f}" height="{bar_h}" fill="{colors[k]}" rx="1"/>')
+            out.append(f'<text x="{label_w + w + 5:.1f}" y="{yy + bar_h - 1}" fill="{INK}" font-family="{MONO}" font-size="8">${v}</text>')
+        y += gh + group_gap
+    lx = label_w
+    for k, sname in enumerate(series):
+        out.append(f'<rect x="{lx}" y="{y + 2}" width="8" height="8" fill="{colors[k]}" rx="2"/>')
+        out.append(f'<text x="{lx + 12}" y="{y + 9}" fill="{INK2}" font-size="8">{esc(sname)}</text>')
+        lx += 12 + 5 * len(sname) + 14
+    out.append("</svg>")
+    return "\n".join(out)
+
+
 def loop_diagram(size=270):
     """Human-in-the-loop ring: agent proposes, human decides, agent acts."""
     import math
@@ -303,7 +360,7 @@ td.num, th.num { text-align: right; font-family: __MONOF__; font-size: 8.4pt; wh
 tr.total td { font-weight: 700; border-top: 1.5px solid __INK__; border-bottom: none; }
 tr.sub td { color: __INK2__; }
 td.note { color: __INK2__; font-size: 7.8pt; }
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 7mm; }
 .cols3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
 .tile { background: __WASH__; border-radius: 2mm; padding: 3mm 3.5mm; }
 .tile .v { font-family: __MONOF__; font-size: 17pt; font-weight: 600; line-height: 1.05; color: __NAVY__; }
@@ -320,6 +377,24 @@ li::marker { color: __BLUE__; }
 .foot .pn { font-family: __MONOF__; font-size: 7.5pt; color: __MUTED__; }
 svg { display: block; }
 .chart { margin: 1mm 0 3mm 0; }
+
+.benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; margin: 1mm 0 3mm 0; }
+.benefits .b { background: __WASH__; border-radius: 2mm; padding: 2.4mm 3mm; border-left: 2.5px solid __BLUE__; }
+.benefits .t { font-family: __MONOF__; font-weight: 600; font-size: 8.6pt; color: __NAVY__; }
+.benefits .d { font-size: 7.8pt; color: __INK2__; line-height: 1.3; margin-top: 0.6mm; }
+.briefs { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin: 1mm 0 2.5mm 0; }
+.brief { border: 1px solid __GRID__; border-radius: 2mm; padding: 2.5mm 3mm; font-size: 8pt; color: __INK2__; line-height: 1.35; }
+.brief b { display: block; color: __INK__; margin-bottom: 1mm; }
+.orgrow { display: flex; align-items: center; gap: 5mm; margin: 1.5mm 0 2mm 0; }
+.orgrow img { height: 5.5mm; }
+.orgrow img.sx { height: 3.4mm; }
+.orgrow img.agentic { border-radius: 1.2mm; }
+.covered { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; }
+.covered div { background: __WASH__; border-radius: 2mm; padding: 2.4mm 3mm; font-size: 7.8pt; color: __INK2__; line-height: 1.3; }
+.covered b { display: block; font-family: __MONOF__; font-size: 8pt; color: __NAVY__; margin-bottom: 0.6mm; }
+.sponsor-tile { display: flex; flex-direction: column; gap: 2.5mm; align-items: flex-start; border: 1px solid __GRID__; border-radius: 2mm; padding: 3mm 3.5mm; font-size: 8.4pt; color: __INK2__; }
+.sponsor-tile img { height: 4.5mm; }
+.cover .band .meta img.sxai { height: 4.5mm; filter: invert(1); margin-top: 1mm; }
 
 /* cover */
 .cover { padding: 14mm 15mm; display: flex; flex-direction: column; }
@@ -399,10 +474,10 @@ page(f"""
 </div>
 <div class="toc">
   <div><b>01</b>The event and what Nokia gets</div>
-  <div><b>02</b>Budget: cash and in kind</div>
+  <div><b>02</b>Budget</div>
   <div><b>03</b>The $20,000 credits line</div>
   <div><b>04</b>Sponsorship packages</div>
-  <div><b>05</b>Plan, risks, next steps</div>
+  <div><b>05</b>Plan and next step</div>
 </div>
 <div class="band">
   <div class="row">
@@ -412,122 +487,105 @@ page(f"""
     <div><div class="v">{eur(TITLE_TIER)}</div><div class="l">proposed Title Partner<br>package for Nokia</div></div>
   </div>
   <div class="meta">
-    <div><b>Organizers</b>agentic.tm · Politehnica University of Timisoara · West University of Timisoara</div>
+    <div><b>Organizers</b>agentic.tm · UPT · UVT</div>
     <div><b>Date</b>{DATES}</div>
-    <div><b>Venue</b>{VENUE}. Meals, drinks and dorm rooms provided by UPT and UVT.</div>
-    <div><b>Sponsors</b>SpaceXAI, confirmed. Nokia, proposed Title Partner.</div>
+    <div><b>Venue</b>{VENUE}</div>
+    <div><b>Confirmed sponsor</b><img class="sxai" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
   </div>
 </div>
 """, "cover")
 
 # 2. The event and what Nokia gets ------------------------------------------
+benefits = [
+    ("Powered by Nokia", "naming on site, stage, T-shirts, badges, every post"),
+    ("20 min keynote", "Friday opening, all participants and teachers"),
+    ("Nokia Challenge", "your problem, your judges, your award"),
+    ("5 mentors", "Nokia engineers at the tables both days"),
+    ("2 jury seats", "plus the challenge track jury"),
+    ("Recruiting", "table at the venue, opt-in CV book"),
+    ("Report", "video, photos, numbers, projects, in two weeks"),
+    ("Meetup talk", "a Nokia slot at agentic.tm"),
+]
 page(f"""
 <p class="kicker">01 · The event and what Nokia gets</p>
 <h1>Two days with {PARTICIPANTS} of the region's strongest young programmers</h1>
 <div class="cols">
 <div>
 <h2>Human in the loop</h2>
-<p>Students build AI agents that reason, plan and act, with a person guiding, approving or correcting
-them at the points that matter. The agent proposes, the human decides. That is how the agent systems that
-work in production are built: a coding agent that opens a pull request for review, a network agent that
-proposes a change and waits for an engineer to approve it.</p>
-<p>Teams get Cursor with frontier models and API access, choose their own stack, and ship a working demo by
-Sunday noon. No fixed problem list. A Nokia Challenge track for teams that want a problem from Nokia's world.</p>
-<h3>Who participates</h3>
-<table>
-<tr><th>Group</th><th class="num">People</th><th>From</th></tr>
-<tr><td>High school, grades 9 to 12</td><td class="num">{HIGH_SCHOOL}</td><td>Timis, Arad, Caras-Severin, Hunedoara, through school inspectorates and the universities' school partnerships</td></tr>
-<tr><td>University students</td><td class="num">{UNIVERSITY}</td><td>UPT and UVT, bachelor's and master's</td></tr>
-<tr class="total"><td>Total</td><td class="num">{PARTICIPANTS}</td><td>{TEAMS} teams of {TEAM_SIZE}, two judging tracks</td></tr>
-</table>
-<p class="small">Participation is free. Minors bring a signed parental consent and an accompanying teacher per school
-group. High school and university teams are judged separately.</p>
+<p>Teams build agents that reason, plan and act, with a person approving the steps that matter. The agent
+proposes, the human decides. Cursor with frontier models, any stack, a working demo by Sunday noon.</p>
+<h3>Who is in the room</h3>
+<div class="chart">{split_bar([("High school, grades 9 to 12", HIGH_SCHOOL, BLUE), ("University, UPT and UVT", UNIVERSITY, NAVY)], width=322)}</div>
+<p class="small">From Timis, Arad, Caras-Severin and Hunedoara. Free to enter. Minors come with parental consent and a
+teacher per school group. Two judging tracks, so a 15-year-old is not scored against a third-year student.</p>
 <h3>The weekend</h3>
-<table class="sched">
-<tr><td>Fri 27 Nov</td><td>17:00 check-in, opening, Nokia keynote, theme briefing. Hacking starts 19:00</td></tr>
-<tr><td>Sat 28 Nov</td><td>Hacking all day. Mentor office hours, two short workshops, Nokia Challenge briefing</td></tr>
-<tr><td>Sun 29 Nov</td><td>12:00 code freeze. Demos from 13:00 in two rooms, one per track. 15:30 awards, closing, group photo</td></tr>
-</table>
-<h3>Organizers</h3>
-<p class="small"><b>agentic.tm</b> is Timisoara's agentic AI community: 250 members on Discord, 500+ on LinkedIn,
-monthly meetups since October 2025. It brings the program, the mentors and the sponsors.
-<b>UPT</b> hosts the event at the Faculty of Automation and Computers on Bd. Vasile Parvan and houses
-out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> together cover food and drinks for the whole
-weekend and provide faculty mentors and judges. <b>SpaceXAI</b> has confirmed it sponsors the event.</p>
+<div class="chart">{schedule_chart(width=322)}</div>
+<h3>Organizers and partners</h3>
+<div class="orgrow">{logos_html()}<img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
+<p class="small">agentic.tm, Timisoara's agentic AI community, runs the program and brings mentors and sponsors.
+UPT hosts and houses the participants; UPT and UVT feed them and add faculty mentors and judges.
+SpaceXAI has confirmed sponsorship.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
-<table>
-<tr><th>Benefit</th><th>Detail</th></tr>
-<tr><td>Naming</td><td>"Powered by Nokia" on the site, registration page, stage backdrop, T-shirts, badges, every post and press release</td></tr>
-<tr><td>Keynote</td><td>20 minutes at Friday's opening, in front of every participant and teacher</td></tr>
-<tr><td>Challenge track</td><td>A Nokia-defined problem, Nokia judges, the Nokia Challenge Award</td></tr>
-<tr><td>Mentors</td><td>Up to five Nokia engineers on the mentor roster, with Nokia badges</td></tr>
-<tr><td>Jury</td><td>Two seats on the main jury plus the challenge track jury</td></tr>
-<tr><td>Recruiting</td><td>Opt-in CV book of participants over 18, a Nokia table at the venue both days</td></tr>
-<tr><td>Report</td><td>Recap video, photo set, written report with numbers and projects, within two weeks</td></tr>
-<tr><td>Community</td><td>A Nokia talk at an agentic.tm meetup before or after the event</td></tr>
-</table>
-<div class="callout"><p><b>Why this fits Nokia Timisoara.</b> The campus employs about 1,300 people, roughly 600 of
-them R&amp;D engineers, and hires mostly from UPT. The {HIGH_SCHOOL} high school students in the room are
-the UPT intake of 2027 to 2029. The {UNIVERSITY} university students are hires of 2027.</p></div>
-<h3>Nokia Challenge track: Nokia picks one of these two briefs</h3>
-<ul>
-  <li><b>Incident triage with approval.</b> An agent reads alarms and logs from a simulated network, proposes
-  a diagnosis and a fix, and waits for an engineer to approve before acting.</li>
-  <li><b>Configuration review.</b> An agent reviews a proposed configuration change, explains the risk in plain
-  language, and asks the human the one question that decides it.</li>
-</ul>
-<p class="small">Nothing runs on Nokia infrastructure. Tooling runs on participants' laptops against the providers'
-APIs, so Nokia's internal restrictions on cloud agents do not touch the event.</p>
+<div class="benefits">
+{''.join(f'<div class="b"><div class="t">{esc(t)}</div><div class="d">{esc(d)}</div></div>' for t, d in benefits)}
+</div>
+<div class="callout"><p><b>Why Nokia Timisoara.</b> About 1,300 people on campus, 600 of them R&amp;D engineers, hired
+mostly from UPT. The {HIGH_SCHOOL} high school students here are the UPT intake of 2027 to 2029; the
+{UNIVERSITY} university students are hires of 2027.</p></div>
+<h3>Nokia Challenge: pick one brief</h3>
+<div class="briefs">
+  <div class="brief"><b>Incident triage with approval</b>An agent reads alarms and logs from a simulated network,
+  proposes a diagnosis and a fix, and waits for an engineer to approve.</div>
+  <div class="brief"><b>Configuration review</b>An agent reviews a proposed change, explains the risk in plain
+  language, and asks the one question that decides it.</div>
+</div>
+<p class="small">Nothing runs on Nokia infrastructure: laptops and the providers' APIs only.</p>
 </div>
 </div>
 """)
 
 # 3. Budget -------------------------------------------------------------------
 budget_rows = [(l, v) for l, v, _ in CASH_LINES] + [("Contingency", CONTINGENCY)]
+prize_rows = [(a if t == "Special awards" else t.replace(" track", "") + " " + a, v) for t, items in PRIZES for a, v in items]
 page(f"""
 <p class="kicker">02 · Budget</p>
-<h1>Where the money goes: {eur(CASH_TOTAL)} in cash, {eur(IN_KIND_TOTAL)} in kind</h1>
-<p class="lead">UPT and UVT cover the venue, the beds, the food and the drinks. agentic.tm covers design and
-mentoring. Sponsors cover what has to be bought: tooling credits, prizes, and the small lines.</p>
+<h1>Where the money goes: {eur(CASH_TOTAL)}</h1>
+<p class="lead">Sponsors pay for what has to be bought: tooling credits, prizes, and the small lines.
+Venue, food, drinks and beds come from the universities.</p>
 <div class="cols">
 <div>
 <div class="chart">{hbar_chart(budget_rows, width=322, label_w=132)}</div>
 <table>
 <tr><th>Cash line</th><th class="num">EUR</th></tr>
-{''.join(f'<tr><td>{esc(l)}<br><span class="note" style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{eur(v)}</td></tr>' for l, v, n in CASH_LINES)}
+{''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{eur(v)}</td></tr>' for l, v, n in CASH_LINES)}
 <tr class="sub"><td>Subtotal</td><td class="num">{eur(CASH_SUBTOTAL)}</td></tr>
-<tr><td>Contingency {int(CONTINGENCY_RATE * 100)}% <span class="note" style="font-size:7.6pt">price changes, no-shows, unspent is reported back</span></td><td class="num">{eur(CONTINGENCY)}</td></tr>
-<tr class="total"><td>Total cash</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
+<tr><td>Contingency {int(CONTINGENCY_RATE * 100)}%</td><td class="num">{eur(CONTINGENCY)}</td></tr>
+<tr class="total"><td>Total</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
 </table>
 </div>
 <div>
-<h3 style="margin-top:0">Covered in kind by the partners: {eur(IN_KIND_TOTAL)}</h3>
-<table>
-<tr><th>Contribution</th><th>From</th><th class="num">Value</th></tr>
-{''.join(f'<tr><td>{esc(l)}</td><td>{esc(f)}</td><td class="num">{eur(v)}</td></tr>' for l, f, v in IN_KIND)}
-<tr class="total"><td>Total in kind</td><td></td><td class="num">{eur(IN_KIND_TOTAL)}</td></tr>
-</table>
-<p class="small">Food is {PEOPLE_FED} people ({PARTICIPANTS} participants, {MENTORS} mentors, {JUDGES} judges, {STAFF} staff)
-at €{FOOD_PER_PERSON} each: two breakfasts, two lunches, two dinners, plus coffee, water and snacks.
-Values are what the organizers would otherwise pay for the same thing.</p>
-<h3>Prize pool</h3>
-<table>
-<tr><th>Track</th><th>Awards</th><th class="num">EUR</th></tr>
-{''.join(f'<tr><td>{esc(t)}</td><td>{", ".join(f"{esc(a)} {eur(v)}" for a, v in items)}</td><td class="num">{eur(sum(v for _, v in items))}</td></tr>' for t, items in PRIZES)}
-<tr class="total"><td>Total</td><td></td><td class="num">{eur(PRIZES_TOTAL)}</td></tr>
-</table>
-<p class="small">Per team of two. High school winners receive vouchers rather than cash, which avoids tax and
-guardianship paperwork for minors. Nokia's judges hand out the Nokia Challenge Award.</p>
-<p class="small">Rate {USD_EUR} EUR per USD, mid-September 2026. Print and swag are Timisoara supplier estimates;
-final quotes follow.</p>
+<h3 style="margin-top:0">Prize pool: {eur(PRIZES_TOTAL)}, per team of two</h3>
+<div class="chart">{hbar_chart(prize_rows, width=322, label_w=150, bar_h=12, gap=6)}</div>
+<p class="small">High school winners get vouchers, which avoids tax and guardianship paperwork for minors.
+Nokia's judges hand out the Nokia Challenge Award.</p>
+<h3>Covered by the partners</h3>
+<div class="covered">
+  <div><b>Venue</b>UPT, Faculty of Automation and Computers</div>
+  <div><b>Food and drinks</b>UPT and UVT, six meals plus coffee, water, snacks for {PEOPLE_FED} people</div>
+  <div><b>Accommodation</b>UPT dorms for out-of-town participants</div>
+  <div><b>Design and mentoring</b>agentic.tm, {MENTORS} mentors, identity, site, media</div>
+</div>
 </div>
 </div>
 """)
 
 # 4. Credits ------------------------------------------------------------------
 credit_rows = [(l, v) for l, v, _ in CREDITS]
+plans = [("Pro $20", [("Plan price", 20), ("Model usage included", 20)]),
+         ("Pro+ $60", [("Plan price", 60), ("Model usage included", 70)]),
+         ("Ultra $200", [("Plan price", 200), ("Model usage included", 400)])]
 page(f"""
 <p class="kicker">03 · The {usd(CREDITS_TOTAL_USD)} credits line</p>
 <h1>{usd(CREDITS_PER_PERSON_USD)} per participant: what it buys, and who pays it</h1>
@@ -540,32 +598,28 @@ page(f"""
 {''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{usd(v)}</td><td class="num">{usd(v * PARTICIPANTS)}</td></tr>' for l, v, n in CREDITS)}
 <tr class="total"><td>Total</td><td class="num">{usd(CREDITS_PER_PERSON_USD)}</td><td class="num">{usd(CREDITS_TOTAL_USD)}</td></tr>
 </table>
-<h3>Why $100 and not $10</h3>
-<p>A chat app that calls a model once per message costs cents. An agent turns one task into dozens of model
-calls, each carrying the whole context of the code so far. A team using a frontier model in an agentic coding
-tool for two days burns through $50 to $150 of usage at list prices. Cursor's own plans show the scale: the $20
-plan includes $20 of model usage, the $60 plan $70, the $200 plan $400. We size the pool so a team does not run
-dry on Saturday evening, and keep a reserve instead of giving everyone the maximum.</p>
-<p class="small">With no credits at all, every team can still build on the providers' free tiers (Gemini, Mistral,
-Groq, GitHub Models). The credits are what put frontier models and an agentic coding tool in their hands.</p>
+<h3>Why $100: an agent burns usage, a chatbot does not</h3>
+<p class="small">One task becomes dozens of model calls, each carrying the whole codebase context. A team on a frontier
+model spends $50 to $150 over a weekend at list prices. Cursor's own plans show the scale:</p>
+<div class="chart">{grouped_hbar(plans, [BLUE, AMBER], width=322, label_w=80)}</div>
+<p class="small">With no credits, teams still build on the providers' free tiers. Credits put frontier models
+and an agentic coding tool in their hands.</p>
 </div>
 <div>
 <h2>Who pays it: three scenarios</h2>
 <div class="chart">{stacked_hbar_chart(SCENARIOS, [BLUE, AMBER, GREEN], width=322, label_w=118)}</div>
 <table>
-<tr><th>Scenario</th><th>Assumption</th><th class="num">Cash</th></tr>
-<tr><td><b>A</b></td><td>Every credit bought at list price. <b>The base case; the whole budget is priced on it.</b></td><td class="num">{usd(20000)}<br><span style="color:{INK2}">{eur(20000 * USD_EUR)}</span></td></tr>
-<tr><td><b>B</b></td><td>Cursor's hackathon program grants $50 per participant, what it gave at its Boston Tech Week hackathon in May 2026. Application submitted; their stated answer time is "the next few weeks".</td><td class="num">{usd(10000)}<br><span style="color:{INK2}">{eur(10000 * USD_EUR)}</span></td></tr>
-<tr><td><b>C</b></td><td>B plus $6,000 from Anthropic, OpenAI or Mistral programs, which gave $25 to $50 per participant at comparable events. Mistral request pending; the others go in once the date is locked.</td><td class="num">{usd(4000)}<br><span style="color:{INK2}">{eur(4000 * USD_EUR)}</span></td></tr>
+<tr><th></th><th>Assumption</th><th class="num">Cash</th></tr>
+<tr><td><b>A</b></td><td>Every credit bought at list price. <b>The budget is priced on this.</b></td><td class="num">{usd(20000)}</td></tr>
+<tr><td><b>B</b></td><td>Cursor's hackathon program grants $50 per participant, as at its Boston event in May 2026. Application in; answer expected in weeks.</td><td class="num">{usd(10000)}</td></tr>
+<tr><td><b>C</b></td><td>B plus $6,000 from Anthropic, OpenAI or Mistral programs, which gave $25 to $50 per participant at comparable events.</td><td class="num">{usd(4000)}</td></tr>
 </table>
-<div class="callout"><p><b>What this means for Nokia.</b> Any credits granted by Cursor or a model provider reduce
-the cash Nokia spends on this line, one for one, and the final split is in the post-event report. Nokia's package
-does not grow if the applications fail.</p></div>
-<h3>What Cursor can and cannot do</h3>
+<div class="callout"><p><b>For Nokia:</b> any credits granted reduce the cash on this line one for one, and the final split
+is in the post-event report. Nokia's package does not grow if the applications fail.</p></div>
+<h3>How credits reach the teams</h3>
 <ul>
-  <li>Cursor grants credits to hackathons "that meet our criteria", case by case. No published amount; recent events got $50 per participant, or prize credits of $500 to $3,500.</li>
-  <li>Cursor's free year for students closed to new sign-ups in June 2026. Cursor does not sponsor food, prizes or venues.</li>
-  <li>Nokia's own Cursor licences stay out of it: cloud agent features are restricted on Nokia's network. The event runs its own workspace.</li>
+  <li>One Cursor Teams workspace owned by the organizers: a seat per participant, a spend cap per seat, no card from any student.</li>
+  <li>Cursor's own licences at Nokia stay out of it; cloud agents are restricted on Nokia's network.</li>
 </ul>
 </div>
 </div>
@@ -579,40 +633,38 @@ page(f"""
   <div class="tier top">
     <div class="name">Title Partner <span class="pill">proposed for Nokia</span></div>
     <div class="price">{eur(TITLE_TIER)}</div>
-    <div class="funds">One slot. Funds the developer tooling credits ({eur(CREDITS_TOTAL_EUR)}) and the prize pool ({eur(PRIZES_TOTAL)}): the two lines that carry a sponsor's name in front of every participant.</div>
+    <div class="funds">One slot. Credits {eur(CREDITS_TOTAL_EUR)} + prize pool {eur(PRIZES_TOTAL)}: the two lines every participant sees.</div>
     <ul>
-      <li>"Powered by Nokia" naming everywhere</li>
+      <li>"Powered by Nokia" naming</li>
       <li>20-minute opening keynote</li>
       <li>Nokia Challenge track and award</li>
-      <li>Up to five mentors, two jury seats</li>
+      <li>Five mentors, two jury seats</li>
       <li>Logo on T-shirts, badges, stage, site</li>
       <li>Recruiting table, opt-in CV book</li>
-      <li>Recap video, photos, written report</li>
-      <li>Talk slot at an agentic.tm meetup</li>
+      <li>Video, photos, written report</li>
+      <li>Talk at an agentic.tm meetup</li>
     </ul>
   </div>
   <div class="tier">
     <div class="name">Gold</div>
     <div class="price">{eur(GOLD_TIER)}</div>
-    <div class="funds">One slot. Funds everything the Title package does not: swag, print, photo and video, safety, the website, and the contingency.</div>
+    <div class="funds">One slot. Swag, print, media, safety, website, contingency.</div>
     <ul>
-      <li>30-minute workshop on Saturday</li>
+      <li>30-minute Saturday workshop</li>
       <li>Two mentors, one jury seat</li>
       <li>Logo on site, stage, T-shirts</li>
       <li>Recruiting table</li>
-      <li>Named in press and social posts</li>
       <li>Report and photo set</li>
     </ul>
   </div>
   <div class="tier">
     <div class="name">Silver</div>
     <div class="price">{eur(SILVER_TIER)}</div>
-    <div class="funds">No limit on slots. Cash or in kind: a print shop, a hardware vendor for prizes, a media partner.</div>
+    <div class="funds">Open. Cash or services: print, prize hardware, media.</div>
     <ul>
       <li>Logo on site and stage</li>
       <li>Mention at opening and closing</li>
       <li>Swag in the participant bag</li>
-      <li>Social media mention</li>
     </ul>
   </div>
 </div>
@@ -620,30 +672,19 @@ page(f"""
 <div class="chart">{stacked_hbar_chart([("Cash budget", [("Nokia, Title", TITLE_TIER), ("Gold ×1", CASH_TOTAL - TITLE_TIER)])], [BLUE, AMBER], width=560, label_w=100, value_fmt=eur)}</div>
 <div class="cols">
 <div>
-<p>Nokia's {eur(TITLE_TIER)} covers {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the
-remaining {eur(CASH_TOTAL - TITLE_TIER)}. SpaceXAI has already confirmed sponsorship; its package is being finalized
-and is not counted above. Whatever it and the credit programs bring lowers the Gold slot and the credits line, and is
-reported back to Nokia as surplus.</p>
+<p>Nokia's {eur(TITLE_TIER)} is {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the rest.</p>
+<div class="sponsor-tile"><img src="{LOGOS['spacexai']}" alt="SpaceXAI"><div><b>Confirmed sponsor.</b> Package being finalized, not yet counted above.
+Whatever it and the credit programs bring lowers the Gold slot and the credits line, and is reported back to Nokia.</div></div>
 </div>
 <div>
-<p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY}. On a yes,
-a one-page agreement lists the benefits above, the amount and the reporting. Two invoices from the organizing
-entity: {eur(TITLE_TIER // 2)} on signing in October, {eur(TITLE_TIER // 2)} in December with the report.</p>
+<div class="callout" style="margin-top:0"><p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY},
+and one Nokia Challenge brief. Then a one-page agreement and two invoices: {eur(TITLE_TIER // 2)} on signing in
+October, {eur(TITLE_TIER // 2)} in December with the report.</p></div>
 </div>
 </div>
-<h2>What each contribution covers</h2>
-<table>
-<tr><th>Who</th><th>Covers</th><th class="num">EUR</th></tr>
-<tr><td>Nokia, Title Partner</td><td>Developer tooling credits {eur(CREDITS_TOTAL_EUR)} and the prize pool {eur(PRIZES_TOTAL)}</td><td class="num">{eur(TITLE_TIER)}</td></tr>
-<tr><td>Gold sponsor</td><td>Swag, print, photo and video, mentor and judge costs, safety, website, contingency</td><td class="num">{eur(CASH_TOTAL - TITLE_TIER)}</td></tr>
-<tr><td>UPT and UVT, in kind</td><td>Venue, food and drinks, dorm rooms</td><td class="num">{eur(4500 + FOOD_TOTAL + 3600)}</td></tr>
-<tr><td>agentic.tm, in kind</td><td>Identity, site, media graphics, mentoring</td><td class="num">{eur(IN_KIND_TOTAL - 4500 - FOOD_TOTAL - 3600)}</td></tr>
-<tr><td>SpaceXAI, confirmed sponsor</td><td>Package being finalized</td><td class="num">tbd</td></tr>
-</table>
-
 """)
 
-# 6. Plan, risks, next steps ----------------------------------------------------
+# 6. Plan, risks, next step ------------------------------------------------------
 months = ["Sep", "Oct", "Nov", "Dec", "Jan"]
 phases = [
     ("Sponsor decisions, Nokia first", 0.4, 1.3, BLUE),
@@ -656,35 +697,30 @@ phases = [
     ("Report and showcase to sponsors", 3.1, 3.7, BLUE),
 ]
 page(f"""
-<p class="kicker">05 · Plan, risks, next steps</p>
+<p class="kicker">05 · Plan and next step</p>
 <h1>From today to the event</h1>
-<p class="lead">The event is on {DATES} at {VENUE}. Sponsor decisions
-come first, because the sponsor's name goes on the site and the school announcements when they launch on 20 October.</p>
 <div class="chart">{timeline_chart(phases, months, width=560, label_w=190)}</div>
 <div class="cols">
 <div>
 <h2>Milestones</h2>
 <table>
 <tr><th>When</th><th>What</th></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 20 Sep</td><td>This proposal reviewed with Nokia</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 10 Oct</td><td>Cursor and Mistral answers on credits; Anthropic and OpenAI applications in</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 15 Oct</td><td>Nokia confirms the Title package and picks the challenge brief; agreement signed</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 20 Oct</td><td>Site live, registration open, first school announcements</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 10 Nov</td><td>10 mentors briefed; Nokia Challenge brief final</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">13 Nov</td><td>Registration closes, consent forms in, seats and credits provisioned, tooling tested end to end</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">27-29 Nov</td><td>The event</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 11 Dec</td><td>Report, video and project showcase to sponsors and press; second invoice</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">15 Oct</td><td>Nokia confirms the Title package and the challenge brief; agreement signed</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">20 Oct</td><td>Site live, registration open, school announcements go out</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">10 Nov</td><td>10 mentors briefed, Nokia Challenge brief final</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">13 Nov</td><td>Registration closes, seats and credits provisioned, tooling tested</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">27-29 Nov</td><td>The event, {VENUE}</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">11 Dec</td><td>Report, video and showcase to sponsors and press; second invoice</td></tr>
 </table>
 </div>
 <div>
-<h2>Risks and what we do about them</h2>
+<h2>Risks</h2>
 <table>
 <tr><th>Risk</th><th>Response</th></tr>
-<tr><td>No provider grants credits</td><td>The budget assumes exactly that. Any grant is upside. The providers' free tiers guarantee every team can build.</td></tr>
-<tr><td>Venue falls through</td><td>UVT's campus is the backup, same weekend. Sponsor money is not spent before the venue booking is signed.</td></tr>
-<tr><td>Minors and accounts</td><td>Seats are created by the organizers, so no student signs a contract or enters a card. Parental consent covers participation and photos. Teacher per school group, medical assistance on site.</td></tr>
-<tr><td>Fewer participants</td><td>Swag and credits scale with headcount. Unspent money is reported and returned or rolled into prizes, as the sponsor prefers.</td></tr>
-<tr><td>Teams run out of credits</td><td>Per-seat caps stop one team draining the pool. The reserve covers Sunday. Free tiers are the fallback.</td></tr>
+<tr><td>No provider grants credits</td><td>The budget already assumes it. Free tiers keep every team building.</td></tr>
+<tr><td>Venue falls through</td><td>UVT's campus, same weekend. No sponsor money is spent before the booking is signed.</td></tr>
+<tr><td>Minors and accounts</td><td>Organizers create every seat; no student signs a contract or enters a card. Consent forms, a teacher per school group, medical assistance on site.</td></tr>
+<tr><td>Fewer participants</td><td>Swag and credits scale with headcount; unspent money is reported and returned.</td></tr>
 </table>
 <div class="callout">
 <p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
@@ -730,4 +766,4 @@ if not chrome:
 subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-sandbox", "--no-pdf-header-footer",
                 f"--print-to-pdf={OUT_PDF}", OUT_HTML.as_uri()], check=True, capture_output=True)
 print(f"wrote {OUT_PDF}")
-print(f"cash {eur(CASH_TOTAL)}  in-kind {eur(IN_KIND_TOTAL)}  credits {usd(CREDITS_TOTAL_USD)} = {eur(CREDITS_TOTAL_EUR)}  title {eur(TITLE_TIER)}")
+print(f"cash {eur(CASH_TOTAL)}  credits {usd(CREDITS_TOTAL_USD)} = {eur(CREDITS_TOTAL_EUR)}  title {eur(TITLE_TIER)}")
