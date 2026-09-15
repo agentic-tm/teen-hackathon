@@ -247,7 +247,7 @@ def loop_diagram(size=270):
     """Human-in-the-loop ring: agent proposes, human decides, agent acts."""
     import math
     c = size / 2
-    r = size * 0.30
+    r = size * 0.28
     def pt(deg):
         a = math.radians(deg)
         return c + r * math.cos(a), c + r * math.sin(a)
@@ -265,8 +265,8 @@ def loop_diagram(size=270):
     for (x, y), col in ((top, CYAN), (right, BLUE), (left, NAVY)):
         out.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="13" fill="{col}" stroke="#fff" stroke-width="3"/>')
     out.append(f'<text x="{top[0]:.1f}" y="{top[1] - 22:.1f}" text-anchor="middle" fill="{INK}" font-weight="600">agent proposes</text>')
-    out.append(f'<text x="{right[0] + 19:.1f}" y="{right[1] + 4:.1f}" text-anchor="start" fill="{INK}" font-weight="600">human decides</text>')
-    out.append(f'<text x="{left[0] - 19:.1f}" y="{left[1] + 4:.1f}" text-anchor="end" fill="{INK}" font-weight="600">agent acts</text>')
+    out.append(f'<text x="{right[0]:.1f}" y="{c + r + 16:.1f}" text-anchor="middle" fill="{INK}" font-weight="600">human decides</text>')
+    out.append(f'<text x="{left[0]:.1f}" y="{c + r + 16:.1f}" text-anchor="middle" fill="{INK}" font-weight="600">agent acts</text>')
     out.append(f'<text x="{c}" y="{c - 3}" text-anchor="middle" fill="{INK2}" font-size="8">HUMAN IN</text>')
     out.append(f'<text x="{c}" y="{c + 9}" text-anchor="middle" fill="{INK2}" font-size="8">THE LOOP</text>')
     out.append('</svg>')
