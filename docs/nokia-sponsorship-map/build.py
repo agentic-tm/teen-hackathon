@@ -87,7 +87,6 @@ CONTINGENCY_RATE = 0.08
 
 CASH_LINES = [
     ("Developer tooling credits", CREDITS_TOTAL_EUR, f"{'${:,}'.format(CREDITS_TOTAL_USD)} at {USD_EUR} EUR/USD, page 4"),
-    ("Food and drinks", FOOD_TOTAL, f"{PEOPLE_FED} people × €{FOOD_PER_PERSON}: six meals plus coffee, water, snacks"),
     ("Prize pool", PRIZES_TOTAL, "Two tracks plus three special awards"),
     ("Swag", SWAG_TOTAL, f"T-shirts {PEOPLE_FED + 10} × €7, lanyards and badges, stickers"),
 ] + [(l, v, n) for l, v, n in OTHER]
@@ -96,16 +95,17 @@ CONTINGENCY = round(CASH_SUBTOTAL * CONTINGENCY_RATE)
 CASH_TOTAL = CASH_SUBTOTAL + CONTINGENCY
 
 IN_KIND = [
-    ("Venue: amphitheatre, labs, network", "UPT / UVT", 4500),
-    ("Dorm rooms for out-of-town participants", "UPT / UVT", 3600),
+    ("Venue: amphitheatre, labs, network", "UPT", 4500),
+    ("Food and drinks, six meals plus coffee, water, snacks", "UPT / UVT", FOOD_TOTAL),
+    ("Dorm rooms for out-of-town participants", "UPT", 3600),
     ("Identity, site, media graphics", "agentic.tm", 2500),
     ("Mentoring, 10 mentors, two days", "agentic.tm, UPT, UVT", 10000),
 ]
 IN_KIND_TOTAL = sum(v for _, _, v in IN_KIND)
 
 TITLE_TIER = 25000
-GOLD_TIER = 10000
-SILVER_TIER = 5000
+GOLD_TIER = 8000
+SILVER_TIER = 2500
 assert TITLE_TIER == CREDITS_TOTAL_EUR + PRIZES_TOTAL, "Title tier must equal credits + prizes"
 
 # Credit funding scenarios, USD
@@ -414,7 +414,7 @@ page(f"""
   <div class="meta">
     <div><b>Organizers</b>agentic.tm · Politehnica University of Timisoara · West University of Timisoara</div>
     <div><b>Date</b>{DATES}</div>
-    <div><b>Venue</b>{VENUE}. Dorms on the UPT student campus.</div>
+    <div><b>Venue</b>{VENUE}. Meals, drinks and dorm rooms provided by UPT and UVT.</div>
   </div>
 </div>
 """, "cover")
@@ -451,8 +451,8 @@ group. High school and university teams are judged separately.</p>
 <p class="small"><b>agentic.tm</b> is Timisoara's agentic AI community: 250 members on Discord, 500+ on LinkedIn,
 monthly meetups since October 2025. It brings the program, the mentors and the sponsors.
 <b>UPT</b> hosts the event at the Faculty of Automation and Computers on Bd. Vasile Parvan and houses
-out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> provide faculty mentors and judges and reach
-their student bodies.</p>
+out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> together cover food and drinks for the whole
+weekend and provide faculty mentors and judges.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
@@ -488,8 +488,8 @@ budget_rows = [(l, v) for l, v, _ in CASH_LINES] + [("Contingency", CONTINGENCY)
 page(f"""
 <p class="kicker">02 · Budget</p>
 <h1>Where the money goes: {eur(CASH_TOTAL)} in cash, {eur(IN_KIND_TOTAL)} in kind</h1>
-<p class="lead">The universities and agentic.tm cover the venue, the beds, the compute and the mentoring. Sponsors
-cover what has to be bought: tooling credits, food, prizes, and the small lines.</p>
+<p class="lead">UPT and UVT cover the venue, the beds, the food and the drinks. agentic.tm covers design and
+mentoring. Sponsors cover what has to be bought: tooling credits, prizes, and the small lines.</p>
 <div class="cols">
 <div>
 <div class="chart">{hbar_chart(budget_rows, width=322, label_w=132)}</div>
@@ -502,14 +502,15 @@ cover what has to be bought: tooling credits, food, prizes, and the small lines.
 </table>
 </div>
 <div>
-<h3 style="margin-top:0">Food and drinks, per person</h3>
+<h3 style="margin-top:0">Covered in kind by the partners: {eur(IN_KIND_TOTAL)}</h3>
 <table>
-<tr><th>Meal</th><th class="num">Count</th><th class="num">Each</th><th class="num">Sub</th></tr>
-{''.join(f'<tr><td>{esc(l)}</td><td class="num">{n}</td><td class="num">{eur(p)}</td><td class="num">{eur(n * p)}</td></tr>' for l, n, p in MEALS)}
-<tr class="total"><td>Per person, × {PEOPLE_FED}</td><td class="num"></td><td class="num">{eur(FOOD_PER_PERSON)}</td><td class="num">{eur(FOOD_TOTAL)}</td></tr>
+<tr><th>Contribution</th><th>From</th><th class="num">Value</th></tr>
+{''.join(f'<tr><td>{esc(l)}</td><td>{esc(f)}</td><td class="num">{eur(v)}</td></tr>' for l, f, v in IN_KIND)}
+<tr class="total"><td>Total in kind</td><td></td><td class="num">{eur(IN_KIND_TOTAL)}</td></tr>
 </table>
-<p class="small">{PARTICIPANTS} participants, {MENTORS} mentors, {JUDGES} judges, {STAFF} organizers and volunteers.
-Friday dinner to Sunday lunch, catering delivered to the venue, vegetarian option at every meal.</p>
+<p class="small">Food is {PEOPLE_FED} people ({PARTICIPANTS} participants, {MENTORS} mentors, {JUDGES} judges, {STAFF} staff)
+at €{FOOD_PER_PERSON} each: two breakfasts, two lunches, two dinners, plus coffee, water and snacks.
+Values are what the organizers would otherwise pay for the same thing.</p>
 <h3>Prize pool</h3>
 <table>
 <tr><th>Track</th><th>Awards</th><th class="num">EUR</th></tr>
@@ -518,8 +519,8 @@ Friday dinner to Sunday lunch, catering delivered to the venue, vegetarian optio
 </table>
 <p class="small">Per team of two. High school winners receive vouchers rather than cash, which avoids tax and
 guardianship paperwork for minors. Nokia's judges hand out the Nokia Challenge Award.</p>
-<p class="small">Rate {USD_EUR} EUR per USD, mid-September 2026. Food, print and swag are Timisoara supplier
-estimates; final quotes follow the date.</p>
+<p class="small">Rate {USD_EUR} EUR per USD, mid-September 2026. Print and swag are Timisoara supplier estimates;
+final quotes follow.</p>
 </div>
 </div>
 """)
@@ -592,7 +593,7 @@ page(f"""
   <div class="tier">
     <div class="name">Gold</div>
     <div class="price">{eur(GOLD_TIER)}</div>
-    <div class="funds">Up to two slots. Funds food, or the media and swag package.</div>
+    <div class="funds">One slot. Funds everything the Title package does not: swag, print, photo and video, safety, the website, and the contingency.</div>
     <ul>
       <li>30-minute workshop on Saturday</li>
       <li>Two mentors, one jury seat</li>
@@ -605,7 +606,7 @@ page(f"""
   <div class="tier">
     <div class="name">Silver</div>
     <div class="price">{eur(SILVER_TIER)}</div>
-    <div class="funds">No limit on slots. In-kind partners (caterer, print shop, hardware for prizes) get Silver benefits against the value they bring.</div>
+    <div class="funds">No limit on slots. Cash or in kind: a print shop, a hardware vendor for prizes, a media partner.</div>
     <ul>
       <li>Logo on site and stage</li>
       <li>Mention at opening and closing</li>
@@ -615,12 +616,12 @@ page(f"""
   </div>
 </div>
 <h2>How the budget closes</h2>
-<div class="chart">{stacked_hbar_chart([("Cash budget", [("Nokia, Title", TITLE_TIER), ("Gold ×1", GOLD_TIER), ("Silver ×2", 2 * SILVER_TIER), ("Credit programs", CASH_TOTAL - TITLE_TIER - GOLD_TIER - 2 * SILVER_TIER)])], [BLUE, AMBER, GREEN, NAVY], width=560, label_w=100, value_fmt=eur)}</div>
+<div class="chart">{stacked_hbar_chart([("Cash budget", [("Nokia, Title", TITLE_TIER), ("Gold ×1", CASH_TOTAL - TITLE_TIER)])], [BLUE, AMBER], width=560, label_w=100, value_fmt=eur)}</div>
 <div class="cols">
 <div>
-<p>Gold and Silver conversations run in parallel with this one, starting with companies already active in
-Timisoara's universities and tech scene. The last {eur(CASH_TOTAL - TITLE_TIER - GOLD_TIER - 2 * SILVER_TIER)} is
-covered by any credit program approval, which lowers the credits line.</p>
+<p>Nokia's {eur(TITLE_TIER)} covers {round(100 * TITLE_TIER / CASH_TOTAL)}% of the cash budget. One Gold sponsor covers the
+remaining {eur(CASH_TOTAL - TITLE_TIER)}; that conversation runs in parallel with this one. Any credit program approval
+lowers the credits line and is reported back to Nokia as surplus.</p>
 </div>
 <div>
 <p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY}. On a yes,
@@ -628,26 +629,14 @@ a one-page agreement lists the benefits above, the amount and the reporting. Two
 entity: {eur(TITLE_TIER // 2)} on signing in October, {eur(TITLE_TIER // 2)} in December with the report.</p>
 </div>
 </div>
-<div class="cols">
-<div>
-<h2>In kind, already committed: {eur(IN_KIND_TOTAL)}</h2>
+<h2>What each contribution covers</h2>
 <table>
-<tr><th>Contribution</th><th>From</th><th class="num">Value</th></tr>
-{''.join(f'<tr><td>{esc(l)}</td><td>{esc(f)}</td><td class="num">{eur(v)}</td></tr>' for l, f, v in IN_KIND)}
-<tr class="total"><td>Total in kind</td><td></td><td class="num">{eur(IN_KIND_TOTAL)}</td></tr>
+<tr><th>Who</th><th>Covers</th><th class="num">EUR</th></tr>
+<tr><td>Nokia, Title Partner</td><td>Developer tooling credits {eur(CREDITS_TOTAL_EUR)} and the prize pool {eur(PRIZES_TOTAL)}</td><td class="num">{eur(TITLE_TIER)}</td></tr>
+<tr><td>Gold sponsor</td><td>Swag, print, photo and video, mentor and judge costs, safety, website, contingency</td><td class="num">{eur(CASH_TOTAL - TITLE_TIER)}</td></tr>
+<tr><td>UPT and UVT, in kind</td><td>Venue, food and drinks, dorm rooms</td><td class="num">{eur(4500 + FOOD_TOTAL + 3600)}</td></tr>
+<tr><td>agentic.tm, in kind</td><td>Identity, site, media graphics, mentoring</td><td class="num">{eur(IN_KIND_TOTAL - 4500 - FOOD_TOTAL - 3600)}</td></tr>
 </table>
-<p class="small">Valued at what the organizers would otherwise pay for the same thing.</p>
-</div>
-<div>
-<h2>What each tier funds</h2>
-<table>
-<tr><th>Tier</th><th>Covers</th></tr>
-<tr><td>Title</td><td>Developer tooling credits {eur(CREDITS_TOTAL_EUR)} and the prize pool {eur(PRIZES_TOTAL)}</td></tr>
-<tr><td>Gold</td><td>Food and drinks {eur(FOOD_TOTAL)}, or swag, print, photo and video together</td></tr>
-<tr><td>Silver</td><td>Mentor and judge costs, safety, website, contingency</td></tr>
-</table>
-</div>
-</div>
 
 """)
 
@@ -683,9 +672,6 @@ come first, because the sponsor's name goes on the site and the school announcem
 <tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">27-29 Nov</td><td>The event</td></tr>
 <tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 11 Dec</td><td>Report, video and project showcase to sponsors and press; second invoice</td></tr>
 </table>
-<h2>Team</h2>
-<p class="small"><b>Vlad Temian</b>, agentic.tm: program, sponsors, credits. <b>Ovidiu Banias</b>: universities, date,
-venue, accommodation. <b>Marius</b>, agentic.tm: identity, site, media. <b>Daniel Adrelean</b>, Nokia: liaison.</p>
 </div>
 <div>
 <h2>Risks and what we do about them</h2>
@@ -694,13 +680,12 @@ venue, accommodation. <b>Marius</b>, agentic.tm: identity, site, media. <b>Danie
 <tr><td>No provider grants credits</td><td>The budget assumes exactly that. Any grant is upside. The providers' free tiers guarantee every team can build.</td></tr>
 <tr><td>Venue falls through</td><td>UVT's campus is the backup, same weekend. Sponsor money is not spent before the venue booking is signed.</td></tr>
 <tr><td>Minors and accounts</td><td>Seats are created by the organizers, so no student signs a contract or enters a card. Parental consent covers participation and photos. Teacher per school group, medical assistance on site.</td></tr>
-<tr><td>Fewer participants</td><td>Food, swag and credits scale with headcount. Unspent money is reported and returned or rolled into prizes, as the sponsor prefers.</td></tr>
+<tr><td>Fewer participants</td><td>Swag and credits scale with headcount. Unspent money is reported and returned or rolled into prizes, as the sponsor prefers.</td></tr>
 <tr><td>Teams run out of credits</td><td>Per-seat caps stop one team draining the pool. The reserve covers Sunday. Free tiers are the fallback.</td></tr>
 </table>
 <div class="callout">
 <p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
 brief by {DECISION_BY}. We send the one-page agreement the same week.</p>
-<p style="margin-top:2mm"><b>Contact</b> · Vlad Temian, agentic.tm · <span class="mono">me@vtemian.com</span></p>
 </div>
 </div>
 </div>
