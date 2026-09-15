@@ -66,6 +66,21 @@ GOLD_TIER = 5000
 SILVER_TIER = 2500
 assert TITLE_TIER == CASH_TOTAL, "Title tier must equal the cash budget"
 
+MATRIX = [
+    ("Event naming: Powered by ...", 1, 0, 0),
+    ("Opening keynote, 20 minutes", 1, 0, 0),
+    ("Own challenge track and award", 1, 0, 0),
+    ("Workshop slot on Saturday", 1, 1, 0),
+    ("Mentors on the roster", 1, 1, 0),
+    ("Jury seats", 1, 1, 0),
+    ("Recruiting table, opt-in CV book", 1, 1, 0),
+    ("Logo on T-shirts, badges, stage, site", 1, 1, 0),
+    ("Logo on site and stage, mention at opening and closing", 1, 1, 1),
+    ("Swag in the participant bag", 1, 1, 1),
+    ("Recap video, photos, written report", 1, 1, 0),
+    ("Talk at an agentic.tm meetup", 1, 0, 0),
+]
+
 # Credit funding scenarios, USD
 SCENARIOS = [
     ("A. No provider help", [("Sponsor cash", CREDITS_TOTAL_USD)]),
@@ -393,6 +408,11 @@ svg { display: block; }
 .orgrow img.sx { height: 4.2mm; }
 .orgrow img.agentic { border-radius: 1.2mm; }
 .covered { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-top: 2mm; }
+.matrix td.c, .matrix th.c { text-align: center; width: 16mm; color: __BLUE__; font-size: 9pt; }
+.matrix td, .matrix th { padding: 1.2mm 1.8mm; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+.step { border-top: 2.5px solid __BLUE__; padding-top: 2mm; font-size: 8.2pt; color: __INK2__; line-height: 1.35; }
+.step b { display: block; font-family: __MONOF__; color: __NAVY__; font-size: 8.5pt; margin-bottom: 1mm; }
 .map { width: 80%; display: block; margin: 1mm auto 2mm auto; }
 .covered div { background: __WASH__; border-radius: 2mm; padding: 2.4mm 3mm; font-size: 7.8pt; color: __INK2__; line-height: 1.3; }
 .covered b { display: block; font-family: __MONOF__; font-size: 8pt; color: __NAVY__; margin-bottom: 0.6mm; }
@@ -614,15 +634,8 @@ page(f"""
 <table>
 <tr><th>Component</th><th class="num">Basis</th><th class="num">USD</th></tr>
 {''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{esc(b)}</td><td class="num">{usd(v)}</td></tr>' for l, b, v, n in CREDITS)}
-<tr class="total"><td>Total</td><td class="num"></td><td class="num">{usd(CREDITS_TOTAL_USD)}<br><span style="font-weight:400;color:{INK2}">{usd(CREDITS_TOTAL_USD)}</span></td></tr>
+<tr class="total"><td>Total</td><td class="num"></td><td class="num">{usd(CREDITS_TOTAL_USD)}</td></tr>
 </table>
-<h3>Why a seat is enough</h3>
-<p class="small">Auto mode on a paid Cursor seat is unlimited, so no team is ever stopped. What runs out is the
-frontier-model pool: about $20 per seat, which an agent on Claude or GPT burns in a day of heavy use. The reserve
-tops up the teams that get there. Comparable events give $25 to $50 per participant; Cursor's own Boston
-hackathons in 2026 gave $50.</p>
-<div class="chart">{grouped_hbar(plans, [BLUE, AMBER], width=322, label_w=80)}</div>
-<p class="small">Cursor plan price against the third-party model usage each includes. Auto mode sits outside these pools.</p>
 </div>
 <div>
 <h2>Who pays it: three scenarios</h2>
@@ -630,18 +643,38 @@ hackathons in 2026 gave $50.</p>
 <table>
 <tr><th></th><th>Assumption</th><th class="num">Cash</th></tr>
 <tr><td><b>A</b></td><td>Every seat bought at list price. <b>The budget is priced on this.</b></td><td class="num">{usd(CREDITS_TOTAL_USD)}</td></tr>
-<tr><td><b>B</b></td><td>Cursor's hackathon program grants $25 per participant. Application in; answer expected in weeks.</td><td class="num">{usd(CREDITS_TOTAL_USD - 25 * PARTICIPANTS)}</td></tr>
-<tr><td><b>C</b></td><td>Cursor grants $50 per participant, as at its Boston events in 2026. Covers seats and reserve.</td><td class="num">{usd(0)}</td></tr>
+<tr><td><b>B</b></td><td>Cursor's hackathon program grants $25 per participant. Application in.</td><td class="num">{usd(CREDITS_TOTAL_USD - 25 * PARTICIPANTS)}</td></tr>
+<tr><td><b>C</b></td><td>Cursor grants $50 per participant, as at its Boston events in 2026.</td><td class="num">{usd(0)}</td></tr>
 </table>
-<div class="callout"><p><b>For Nokia:</b> any credits granted reduce the cash on this line one for one, and the final split
-is in the post-event report. Nokia's package does not grow if the application fails.</p></div>
-<h3>How credits reach the teams</h3>
+</div>
+</div>
+<div class="cols" style="margin-top:3mm">
+<div>
+<h2>Why a seat is enough</h2>
+<p class="small">Auto mode on a paid Cursor seat is unlimited, so no team is ever stopped. What runs out is the
+frontier-model pool, about $20 per seat, which an agent on Claude or GPT burns in a day of heavy use. The reserve
+tops up the teams that get there. Comparable events give $25 to $50 per participant; Cursor's own Boston
+hackathons in 2026 gave $50.</p>
+<div class="chart">{grouped_hbar(plans, [BLUE, AMBER], width=322, label_w=80, bar_h=9, gap=3, group_gap=10)}</div>
+<p class="small">Cursor plan price against the third-party model usage each includes. Auto mode sits outside these pools.</p>
+</div>
+<div>
+<h2>How credits reach the teams</h2>
 <ul>
   <li>One Cursor Teams workspace owned by the organizers: a seat per participant, a spend cap per seat, no card from any student.</li>
   <li>Reserve top-ups are released by the organizers on Saturday evening and Sunday morning, on request.</li>
   <li>Cursor's own licences at Nokia stay out of it; cloud agents are restricted on Nokia's network.</li>
 </ul>
+<div class="callout"><p><b>For Nokia:</b> any credits granted reduce the cash on this line one for one, and the final split
+is in the post-event report. Nokia's package does not grow if the application fails.</p></div>
 </div>
+</div>
+<h2 style="margin-top:4mm">Credits timeline</h2>
+<div class="steps">
+  <div class="step"><b>13 Nov</b>Seats created for every registered participant, spend caps set</div>
+  <div class="step"><b>20 Nov</b>Every team logs in and runs the starter kit end to end</div>
+  <div class="step"><b>27-29 Nov</b>Hacking. Reserve top-ups on request, Saturday evening and Sunday morning</div>
+  <div class="step"><b>11 Dec</b>Usage report to Nokia: seats used, reserve spent, unused returned</div>
 </div>
 """)
 
@@ -688,7 +721,12 @@ page(f"""
     </ul>
   </div>
 </div>
-<h2>How the budget closes</h2>
+<h2>What each tier includes</h2>
+<table class="matrix">
+<tr><th>Benefit</th><th class="c">Title</th><th class="c">Gold</th><th class="c">Silver</th></tr>
+{''.join(f'<tr><td>{esc(r)}</td><td class="c">{"●" if t else ""}</td><td class="c">{"●" if g else ""}</td><td class="c">{"●" if v else ""}</td></tr>' for r, t, g, v in MATRIX)}
+</table>
+<h2 style="margin-top:4mm">How the budget closes</h2>
 <div class="cols">
 <div>
 <p>Nokia's {usd(TITLE_TIER)} is the whole cash budget: credits and prizes. Gold and Silver sponsors add swag, print,
@@ -719,7 +757,7 @@ phases = [
 page(f"""
 <p class="kicker">05 · Plan and next step</p>
 <h1>From today to the event</h1>
-<div class="chart">{timeline_chart(phases, months, width=560, label_w=190)}</div>
+<div class="chart">{timeline_chart(phases, months, width=560, label_w=190, row_h=17, gap=6)}</div>
 <div class="cols">
 <div>
 <h2>Milestones</h2>
@@ -741,12 +779,14 @@ page(f"""
 <tr><td>Venue falls through</td><td>UVT's campus, same weekend. No sponsor money is spent before the booking is signed.</td></tr>
 <tr><td>Minors and accounts</td><td>Organizers create every seat; no student signs a contract or enters a card. Consent forms, a teacher per school group, medical assistance on site.</td></tr>
 <tr><td>Fewer participants</td><td>Credits scale with headcount; unspent money is reported and returned.</td></tr>
+<tr><td>Cursor's answer slips</td><td>Seats are bought at list price either way; a late grant only lowers the cash.</td></tr>
+<tr><td>Nokia decides after 15 Oct</td><td>The name still goes on the site and T-shirts; only the launch announcement goes out without it.</td></tr>
 </table>
-<div class="callout">
+</div>
+</div>
+<div class="callout" style="margin-top:2mm">
 <p><b>Next step:</b> Nokia confirms the Title Partner package ({usd(TITLE_TIER)}) and picks one Nokia Challenge
 brief by {DECISION_BY}. We send the one-page agreement the same week.</p>
-</div>
-</div>
 </div>
 <h2 style="margin-top:5mm">Organizers and partners</h2>
 <div class="orgrow">{logos_html()}<img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
