@@ -33,20 +33,19 @@ JUDGES = 6
 STAFF = 14
 PEOPLE_FED = PARTICIPANTS + MENTORS + JUDGES + STAFF
 
-# Credits, USD per participant
-CREDITS = [
-    ("Cursor seat, one month", 40,
-     "One workspace owned by the organizers. Central billing, spend limit per seat, "
-     "no card from any student."),
-    ("Frontier model usage", 50,
-     "Claude, GPT and Gemini calls through Cursor or a team API key behind a gateway. "
-     "This is the pool that empties on a hackathon weekend."),
-    ("Sunday reserve", 10,
-     "Released on Sunday morning to teams close to their cap. Unused reserve is not spent."),
-]
-CREDITS_PER_PERSON_USD = sum(v for _, v, _ in CREDITS)
-CREDITS_TOTAL_USD = CREDITS_PER_PERSON_USD * PARTICIPANTS
+# Credits, USD
+SEAT_USD = 40                      # Cursor Teams seat, one month, per participant
+RESERVE_USD = 2000                 # central top-up pool, released on request
+SEATS_TOTAL_USD = SEAT_USD * PARTICIPANTS
+CREDITS_TOTAL_USD = SEATS_TOTAL_USD + RESERVE_USD
 CREDITS_TOTAL_EUR = round(CREDITS_TOTAL_USD * USD_EUR)
+CREDITS = [
+    ("Cursor Teams seat, one month", f"${SEAT_USD} × {PARTICIPANTS}", SEATS_TOTAL_USD,
+     "Unlimited Auto mode plus about $20 of Claude, GPT or Gemini usage per seat. "
+     "One workspace owned by the organizers, spend cap per seat, no card from any student."),
+    ("Central reserve", "pooled", RESERVE_USD,
+     "Top-ups on request for teams that hit their frontier-model cap. Unused reserve is not spent."),
+]
 
 # Prizes, EUR, per team of two
 PRIZES = [
@@ -64,17 +63,16 @@ CASH_LINES = [
 ]
 CASH_TOTAL = sum(v for _, v, _ in CASH_LINES)
 
-TITLE_TIER = 25000
+TITLE_TIER = CASH_TOTAL
 GOLD_TIER = 5000
 SILVER_TIER = 2500
 assert TITLE_TIER == CASH_TOTAL, "Title tier must equal the cash budget"
 
 # Credit funding scenarios, USD
 SCENARIOS = [
-    ("A. No provider help", [("Sponsor cash", 20000)]),
-    ("B. Cursor credits", [("Sponsor cash", 10000), ("Cursor credits", 10000)]),
-    ("C. Cursor + providers", [("Sponsor cash", 4000), ("Cursor credits", 10000),
-                                        ("Model provider programs", 6000)]),
+    ("A. No provider help", [("Sponsor cash", CREDITS_TOTAL_USD)]),
+    ("B. Cursor grants $25 each", [("Sponsor cash", CREDITS_TOTAL_USD - 25 * PARTICIPANTS), ("Cursor credits", 25 * PARTICIPANTS)]),
+    ("C. Cursor grants $50 each", [("Cursor credits", 50 * PARTICIPANTS)]),
 ]
 
 DATES = "Friday 27 to Sunday 29 November 2026"
@@ -489,7 +487,7 @@ page(f"""
 <div class="toc">
   <div><b>01</b>The event and what Nokia gets</div>
   <div><b>02</b>Budget</div>
-  <div><b>03</b>The $20,000 credits line</div>
+  <div><b>03</b>The $10,000 credits line</div>
   <div><b>04</b>Sponsorship packages</div>
   <div><b>05</b>Plan and next step</div>
 </div>
@@ -573,9 +571,10 @@ the prizes. Everything else comes from the universities, agentic.tm and the othe
 {''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{eur(v)}</td></tr>' for l, v, n in CASH_LINES)}
 <tr class="total"><td>Total, the Title Partner package</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
 </table>
-<h3>Credits per team</h3>
-<div class="chart">{split_bar([("Cursor seats", 80, BLUE), ("Model usage", 100, NAVY), ("Reserve", 20, GREEN)], width=322, value_fmt=usd)}</div>
-<p class="small">{usd(CREDITS_PER_PERSON_USD * TEAM_SIZE)} per team of two, {TEAMS} teams. The split and the funding scenarios are on page 4.</p>
+<h3>Credits: {usd(CREDITS_TOTAL_USD)}</h3>
+<div class="chart">{split_bar([(f"Cursor seats, ${SEAT_USD} × {PARTICIPANTS}", SEATS_TOTAL_USD, BLUE), ("Reserve", RESERVE_USD, GREEN)], width=322, value_fmt=usd)}</div>
+<p class="small">One Cursor Teams seat per participant for the event month, plus a pooled reserve. Details and funding
+scenarios on page 4.</p>
 </div>
 <div>
 <h3 style="margin-top:0">Prize pool: {eur(PRIZES_TOTAL)}, per team of two</h3>
@@ -595,43 +594,43 @@ Nokia's judges hand out the Nokia Challenge Award.</p>
 """)
 
 # 4. Credits ------------------------------------------------------------------
-credit_rows = [(l, v) for l, v, _ in CREDITS]
 plans = [("Pro $20", [("Plan price", 20), ("Model usage included", 20)]),
-         ("Pro+ $60", [("Plan price", 60), ("Model usage included", 70)]),
-         ("Ultra $200", [("Plan price", 200), ("Model usage included", 400)])]
+         ("Teams $40", [("Plan price", 40), ("Model usage included", 20)]),
+         ("Pro+ $60", [("Plan price", 60), ("Model usage included", 70)])]
 page(f"""
 <p class="kicker">03 · The {usd(CREDITS_TOTAL_USD)} credits line</p>
-<h1>{usd(CREDITS_PER_PERSON_USD)} per participant: what it buys, and who pays it</h1>
+<h1>A ${SEAT_USD} Cursor seat per participant, plus a {usd(RESERVE_USD)} reserve</h1>
 <div class="cols">
 <div>
-<h2>The split</h2>
-<div class="chart">{hbar_chart(credit_rows, width=322, label_w=128, value_fmt=lambda v: f"${v} / person")}</div>
+<h2>What it buys</h2>
 <table>
-<tr><th>Component</th><th class="num">Each</th><th class="num">× {PARTICIPANTS}</th></tr>
-{''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{usd(v)}</td><td class="num">{usd(v * PARTICIPANTS)}</td></tr>' for l, v, n in CREDITS)}
-<tr class="total"><td>Total</td><td class="num">{usd(CREDITS_PER_PERSON_USD)}</td><td class="num">{usd(CREDITS_TOTAL_USD)}</td></tr>
+<tr><th>Component</th><th class="num">Basis</th><th class="num">USD</th></tr>
+{''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{esc(b)}</td><td class="num">{usd(v)}</td></tr>' for l, b, v, n in CREDITS)}
+<tr class="total"><td>Total</td><td class="num"></td><td class="num">{usd(CREDITS_TOTAL_USD)}<br><span style="font-weight:400;color:{INK2}">{eur(CREDITS_TOTAL_EUR)}</span></td></tr>
 </table>
-<h3>Why $100: an agent burns usage, a chatbot does not</h3>
-<p class="small">One task becomes dozens of model calls, each carrying the whole codebase context. A team on a frontier
-model spends $50 to $150 over a weekend at list prices. Cursor's own plans show the scale:</p>
+<h3>Why a seat is enough</h3>
+<p class="small">Auto mode on a paid Cursor seat is unlimited, so no team is ever stopped. What runs out is the
+frontier-model pool: about $20 per seat, which an agent on Claude or GPT burns in a day of heavy use. The reserve
+tops up the teams that get there. Comparable events give $25 to $50 per participant; Cursor's own Boston
+hackathons in 2026 gave $50.</p>
 <div class="chart">{grouped_hbar(plans, [BLUE, AMBER], width=322, label_w=80)}</div>
-<p class="small">With no credits, teams still build on the providers' free tiers. Credits put frontier models
-and an agentic coding tool in their hands.</p>
+<p class="small">Cursor plan price against the third-party model usage each includes. Auto mode sits outside these pools.</p>
 </div>
 <div>
 <h2>Who pays it: three scenarios</h2>
-<div class="chart">{stacked_hbar_chart(SCENARIOS, [BLUE, AMBER, GREEN], width=322, label_w=118)}</div>
+<div class="chart">{stacked_hbar_chart(SCENARIOS, [BLUE, AMBER], width=322, label_w=130)}</div>
 <table>
 <tr><th></th><th>Assumption</th><th class="num">Cash</th></tr>
-<tr><td><b>A</b></td><td>Every credit bought at list price. <b>The budget is priced on this.</b></td><td class="num">{usd(20000)}</td></tr>
-<tr><td><b>B</b></td><td>Cursor's hackathon program grants $50 per participant, as at its Boston event in May 2026. Application in; answer expected in weeks.</td><td class="num">{usd(10000)}</td></tr>
-<tr><td><b>C</b></td><td>B plus $6,000 from Anthropic, OpenAI or Mistral programs, which gave $25 to $50 per participant at comparable events.</td><td class="num">{usd(4000)}</td></tr>
+<tr><td><b>A</b></td><td>Every seat bought at list price. <b>The budget is priced on this.</b></td><td class="num">{usd(CREDITS_TOTAL_USD)}</td></tr>
+<tr><td><b>B</b></td><td>Cursor's hackathon program grants $25 per participant. Application in; answer expected in weeks.</td><td class="num">{usd(CREDITS_TOTAL_USD - 25 * PARTICIPANTS)}</td></tr>
+<tr><td><b>C</b></td><td>Cursor grants $50 per participant, as at its Boston events in 2026. Covers seats and reserve.</td><td class="num">{usd(0)}</td></tr>
 </table>
 <div class="callout"><p><b>For Nokia:</b> any credits granted reduce the cash on this line one for one, and the final split
-is in the post-event report. Nokia's package does not grow if the applications fail.</p></div>
+is in the post-event report. Nokia's package does not grow if the application fails.</p></div>
 <h3>How credits reach the teams</h3>
 <ul>
   <li>One Cursor Teams workspace owned by the organizers: a seat per participant, a spend cap per seat, no card from any student.</li>
+  <li>Reserve top-ups are released by the organizers on Saturday evening and Sunday morning, on request.</li>
   <li>Cursor's own licences at Nokia stay out of it; cloud agents are restricted on Nokia's network.</li>
 </ul>
 </div>
