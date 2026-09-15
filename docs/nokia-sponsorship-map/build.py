@@ -98,7 +98,6 @@ CASH_TOTAL = CASH_SUBTOTAL + CONTINGENCY
 IN_KIND = [
     ("Venue: amphitheatre, labs, network", "UPT / UVT", 4500),
     ("Dorm rooms for out-of-town participants", "UPT / UVT", 3600),
-    ("GPU cluster for open-weight models", "UPT / UVT", 2000),
     ("Identity, site, media graphics", "agentic.tm", 2500),
     ("Mentoring, 10 mentors, two days", "agentic.tm, UPT, UVT", 10000),
 ]
@@ -415,7 +414,7 @@ page(f"""
   <div class="meta">
     <div><b>Organizers</b>agentic.tm · Politehnica University of Timisoara · West University of Timisoara</div>
     <div><b>Date</b>{DATES}</div>
-    <div><b>Venue</b>{VENUE}. Dorms on the UPT student campus, GPU cluster from UPT and UVT.</div>
+    <div><b>Venue</b>{VENUE}. Dorms on the UPT student campus.</div>
   </div>
 </div>
 """, "cover")
@@ -452,8 +451,8 @@ group. High school and university teams are judged separately.</p>
 <p class="small"><b>agentic.tm</b> is Timisoara's agentic AI community: 250 members on Discord, 500+ on LinkedIn,
 monthly meetups since October 2025. It brings the program, the mentors and the sponsors.
 <b>UPT</b> hosts the event at the Faculty of Automation and Computers on Bd. Vasile Parvan and houses
-out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> provide the GPU cluster for open-weight models,
-and faculty mentors and judges.</p>
+out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> provide faculty mentors and judges and reach
+their student bodies.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
@@ -478,8 +477,8 @@ the UPT intake of 2027 to 2029. The {UNIVERSITY} university students are hires o
   <li><b>Configuration review.</b> An agent reviews a proposed configuration change, explains the risk in plain
   language, and asks the human the one question that decides it.</li>
 </ul>
-<p class="small">Nothing runs on Nokia infrastructure. Tooling runs on participants' laptops and the universities'
-clusters, so Nokia's internal restrictions on cloud agents do not touch the event.</p>
+<p class="small">Nothing runs on Nokia infrastructure. Tooling runs on participants' laptops against the providers'
+APIs, so Nokia's internal restrictions on cloud agents do not touch the event.</p>
 </div>
 </div>
 """)
@@ -545,8 +544,8 @@ calls, each carrying the whole context of the code so far. A team using a fronti
 tool for two days burns through $50 to $150 of usage at list prices. Cursor's own plans show the scale: the $20
 plan includes $20 of model usage, the $60 plan $70, the $200 plan $400. We size the pool so a team does not run
 dry on Saturday evening, and keep a reserve instead of giving everyone the maximum.</p>
-<p class="small">With no credits at all, every team can still build on free tiers and on open-weight models served
-from the UPT and UVT GPU clusters. The credits are what put frontier models in their hands.</p>
+<p class="small">With no credits at all, every team can still build on the providers' free tiers (Gemini, Mistral,
+Groq, GitHub Models). The credits are what put frontier models and an agentic coding tool in their hands.</p>
 </div>
 <div>
 <h2>Who pays it: three scenarios</h2>
@@ -692,11 +691,11 @@ venue, accommodation. <b>Marius</b>, agentic.tm: identity, site, media. <b>Danie
 <h2>Risks and what we do about them</h2>
 <table>
 <tr><th>Risk</th><th>Response</th></tr>
-<tr><td>No provider grants credits</td><td>The budget assumes exactly that. Any grant is upside. Free tiers and the university GPU clusters guarantee every team can build.</td></tr>
+<tr><td>No provider grants credits</td><td>The budget assumes exactly that. Any grant is upside. The providers' free tiers guarantee every team can build.</td></tr>
 <tr><td>Venue falls through</td><td>UVT's campus is the backup, same weekend. Sponsor money is not spent before the venue booking is signed.</td></tr>
 <tr><td>Minors and accounts</td><td>Seats are created by the organizers, so no student signs a contract or enters a card. Parental consent covers participation and photos. Teacher per school group, medical assistance on site.</td></tr>
 <tr><td>Fewer participants</td><td>Food, swag and credits scale with headcount. Unspent money is reported and returned or rolled into prizes, as the sponsor prefers.</td></tr>
-<tr><td>Teams run out of credits</td><td>Per-seat caps stop one team draining the pool. The reserve covers Sunday. Open-weight models on the cluster are the fallback.</td></tr>
+<tr><td>Teams run out of credits</td><td>Per-seat caps stop one team draining the pool. The reserve covers Sunday. Free tiers are the fallback.</td></tr>
 </table>
 <div class="callout">
 <p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
