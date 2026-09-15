@@ -243,32 +243,39 @@ def split_bar(parts, width=322, bar_h=18):
 
 
 def schedule_chart(width=322):
-    """Friday 17:00 to Sunday 16:00 as one strip per day, with the named moments."""
-    days = [("Fri 27", 17, 24), ("Sat 28", 0, 24), ("Sun 29", 0, 16)]
-    marks = [(0, 17, "opening, Nokia keynote"), (0, 19, "hacking starts"), (1, 10, "workshops, mentor hours"),
-             (2, 12, "code freeze"), (2, 13, "demos"), (2, 15.5, "awards")]
+    """Three day strips, hours across, one labeled block per activity."""
+    days = [
+        ("Fri 27", [(17, 19, "17:00 opening, keynote", NAVY), (19, 24, "hacking", BLUE)]),
+        ("Sat 28", [(0, 24, "hacking, workshops, mentor office hours", BLUE)]),
+        ("Sun 29", [(0, 12, "hacking", BLUE), (12, 16, "12:00 freeze · 13:00 demos · 15:30 awards", GREEN)]),
+    ]
     label_w = 44
-    row_h = 14
-    gap = 30
+    row_h = 16
+    gap = 14
+    top = 12
     plot_w = width - label_w - 4
-    h = len(days) * (row_h + gap) + 4
+    h = top + len(days) * (row_h + gap)
     out = [f'<svg viewBox="0 0 {width} {h}" width="{width}" height="{h}" font-family="{SANS}" font-size="8">']
-    y = 2
-    for i, (d, a, b) in enumerate(days):
-        out.append(f'<text x="{label_w - 8}" y="{y + row_h * 0.75:.1f}" text-anchor="end" fill="{INK2}" font-family="{MONO}">{d}</text>')
-        out.append(f'<rect x="{label_w}" y="{y}" width="{plot_w}" height="{row_h}" fill="{GRID}" rx="2"/>')
-        x1 = label_w + plot_w * a / 24
-        x2 = label_w + plot_w * b / 24
-        out.append(f'<rect x="{x1:.1f}" y="{y}" width="{x2 - x1:.1f}" height="{row_h}" fill="{BLUE}" rx="2"/>')
-        k = 0
-        for di, hr, txt in marks:
-            if di != i:
-                continue
-            mx = label_w + plot_w * hr / 24
-            ty = y + row_h + 11 + 10 * k
-            out.append(f'<line x1="{mx:.1f}" y1="{y}" x2="{mx:.1f}" y2="{ty - 8}" stroke="{NAVY}" stroke-width="1.5"/>')
-            out.append(f'<text x="{mx + 3:.1f}" y="{ty}" fill="{INK2}">{esc(txt)}</text>')
-            k += 1
+    for hr in (0, 6, 12, 18, 24):
+        x = label_w + plot_w * hr / 24
+        out.append(f'<text x="{x:.1f}" y="8" text-anchor="middle" fill="{MUTED}" font-family="{MONO}" font-size="7">{hr:02d}:00</text>')
+        out.append(f'<line x1="{x:.1f}" y1="{top}" x2="{x:.1f}" y2="{h - gap + 2}" stroke="{GRID}" stroke-width="1"/>')
+    y = top + 2
+    for d, blocks in days:
+        out.append(f'<text x="{label_w - 8}" y="{y + row_h * 0.72:.1f}" text-anchor="end" fill="{INK2}" font-family="{MONO}">{d}</text>')
+        below = []
+        for a, b, txt, c in blocks:
+            x1 = label_w + plot_w * a / 24
+            w = plot_w * (b - a) / 24
+            out.append(f'<rect x="{x1:.1f}" y="{y}" width="{max(0, w - 1.5):.1f}" height="{row_h}" fill="{c}" rx="2"/>')
+            if w > 4.6 * len(txt) + 8:
+                out.append(f'<text x="{x1 + 4:.1f}" y="{y + row_h * 0.7:.1f}" fill="#fff" font-weight="600">{esc(txt)}</text>')
+            else:
+                below.append((x1 + w / 2, txt))
+        for k, (bx, txt) in enumerate(below):
+            anchor = "end" if bx > label_w + plot_w * 0.55 else "middle"
+            bx = min(bx + 40, label_w + plot_w) if anchor == "end" else bx
+            out.append(f'<text x="{bx:.1f}" y="{y + row_h + 9}" text-anchor="{anchor}" fill="{INK2}">{esc(txt)}</text>')
         y += row_h + gap
     out.append("</svg>")
     return "\n".join(out)
@@ -394,16 +401,18 @@ svg { display: block; }
 .covered b { display: block; font-family: __MONOF__; font-size: 8pt; color: __NAVY__; margin-bottom: 0.6mm; }
 .sponsor-tile { display: flex; flex-direction: column; gap: 2.5mm; align-items: flex-start; border: 1px solid __GRID__; border-radius: 2mm; padding: 3mm 3.5mm; font-size: 8.4pt; color: __INK2__; }
 .sponsor-tile img { height: 4.5mm; }
-.cover .band .meta img.sxai { height: 4.5mm; filter: invert(1); margin-top: 1mm; }
 
 /* cover */
 .cover { padding: 14mm 15mm; display: flex; flex-direction: column; }
 .cover .top { display: flex; justify-content: space-between; align-items: center; }
-.cover .top .org img { height: 11mm; margin-right: 6mm; vertical-align: middle; }
-.cover .top .org img.agentic { height: 11mm; border-radius: 2mm; }
+.cover .top .org { display: flex; align-items: center; gap: 5mm; flex: none; }
+.cover .top .org img { height: 9mm; }
+.cover .top .org img.agentic { border-radius: 1.6mm; }
 .cover .for { text-align: right; }
 .cover .for .k { font-family: __MONOF__; font-size: 7pt; letter-spacing: 0.14em; text-transform: uppercase; color: __MUTED__; margin-bottom: 1.5mm; }
 .cover .for img { height: 7mm; }
+.cover .for img.sx { height: 5mm; margin-top: 1mm; }
+.cover .right { display: flex; gap: 8mm; align-items: flex-end; flex: none; }
 .cover .hero { display: grid; grid-template-columns: 1fr 70mm; gap: 4mm; align-items: center; margin-top: 42mm; }
 .cover .toc { margin-top: 18mm; display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; }
 .cover .toc div { border-top: 2px solid __GRID__; padding-top: 2mm; font-size: 8pt; color: __INK2__; }
@@ -416,7 +425,7 @@ svg { display: block; }
 .cover .band .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; }
 .cover .band .v { font-family: __MONOF__; font-size: 19pt; font-weight: 600; line-height: 1; }
 .cover .band .l { font-size: 7.8pt; color: #b9c6e0; margin-top: 1.5mm; line-height: 1.3; }
-.cover .band .meta { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 5mm; margin-top: 6mm; padding-top: 4mm; border-top: 1px solid rgba(255,255,255,0.18); font-size: 8pt; color: #b9c6e0; }
+.cover .band .meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; margin-top: 6mm; padding-top: 4mm; border-top: 1px solid rgba(255,255,255,0.18); font-size: 8pt; color: #b9c6e0; }
 .cover .band .meta b { display: block; color: #fff; font-family: __MONOF__; font-weight: 500; font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1mm; }
 
 /* tiers */
@@ -461,7 +470,10 @@ def page(body, cls=""):
 page(f"""
 <div class="top">
   <div class="org">{logos_html()}</div>
-  <div class="for"><div class="k">Prepared for</div><img src="{LOGOS['nokia']}" alt="Nokia"></div>
+  <div class="right">
+    <div class="for"><div class="k">Confirmed sponsor</div><img class="sx" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
+    <div class="for"><div class="k">Prepared for</div><img src="{LOGOS['nokia']}" alt="Nokia"></div>
+  </div>
 </div>
 <div class="hero">
   <div>
@@ -490,7 +502,6 @@ page(f"""
     <div><b>Organizers</b>agentic.tm · UPT · UVT</div>
     <div><b>Date</b>{DATES}</div>
     <div><b>Venue</b>{VENUE}</div>
-    <div><b>Confirmed sponsor</b><img class="sxai" src="{LOGOS['spacexai']}" alt="SpaceXAI"></div>
   </div>
 </div>
 """, "cover")
