@@ -21,7 +21,6 @@ OUT_HTML = HERE.parent / "nokia-sponsorship-map.html"
 OUT_PDF = HERE.parent / "nokia-sponsorship-map.pdf"
 
 # ---------------------------------------------------------------- BUDGET ----
-USD_EUR = 0.86  # 1 USD in EUR, mid-September 2026
 
 HIGH_SCHOOL = 140
 UNIVERSITY = 60
@@ -38,7 +37,6 @@ SEAT_USD = 40                      # Cursor Teams seat, one month, per participa
 RESERVE_USD = 2000                 # central top-up pool, released on request
 SEATS_TOTAL_USD = SEAT_USD * PARTICIPANTS
 CREDITS_TOTAL_USD = SEATS_TOTAL_USD + RESERVE_USD
-CREDITS_TOTAL_EUR = round(CREDITS_TOTAL_USD * USD_EUR)
 CREDITS = [
     ("Cursor Teams seat, one month", f"${SEAT_USD} × {PARTICIPANTS}", SEATS_TOTAL_USD,
      "Unlimited Auto mode plus about $20 of Claude, GPT or Gemini usage per seat. "
@@ -47,7 +45,7 @@ CREDITS = [
      "Top-ups on request for teams that hit their frontier-model cap. Unused reserve is not spent."),
 ]
 
-# Prizes, EUR, per team of two
+# Prizes, USD, per team of two
 PRIZES = [
     ("High school track", [("1st place", 1000), ("2nd place", 600), ("3rd place", 400)]),
     ("University track", [("1st place", 1000), ("2nd place", 600), ("3rd place", 400)]),
@@ -58,7 +56,7 @@ PRIZES = [
 PRIZES_TOTAL = sum(v for _, items in PRIZES for _, v in items)
 
 CASH_LINES = [
-    ("Developer tooling credits", CREDITS_TOTAL_EUR, f"{'${:,}'.format(CREDITS_TOTAL_USD)}, detailed on page 4"),
+    ("Developer tooling credits", CREDITS_TOTAL_USD, "Cursor seats plus reserve, detailed on page 4"),
     ("Prize pool", PRIZES_TOTAL, "Two tracks plus three special awards"),
 ]
 CASH_TOTAL = sum(v for _, v, _ in CASH_LINES)
@@ -92,10 +90,6 @@ GRID = "#e3e7ee"
 WASH = "#f3f6fb"
 
 
-def eur(v):
-    return f"€{round(v):,}"
-
-
 def usd(v):
     return f"${round(v):,}"
 
@@ -126,7 +120,7 @@ SANS = "'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif"
 
 
 # ---------------------------------------------------------------- CHARTS ----
-def hbar_chart(rows, width=560, bar_h=14, gap=7, label_w=200, value_fmt=eur, color=BLUE):
+def hbar_chart(rows, width=560, bar_h=14, gap=7, label_w=200, value_fmt=usd, color=BLUE):
     max_value = max(v for _, v in rows)
     h = len(rows) * (bar_h + gap) + gap
     plot_w = width - label_w - 70
@@ -303,7 +297,7 @@ def grouped_prize_chart(groups, width=322, bar_h=11, gap=5, label_w=120):
             w = plot_w * v / max_v
             out.append(f'<text x="{label_w - 8}" y="{y + bar_h * 0.78:.1f}" text-anchor="end" fill="{INK2}">{esc(award)}</text>')
             out.append(f'<rect x="{label_w}" y="{y}" width="{w:.1f}" height="{bar_h}" fill="{BLUE}" rx="1.5"/>')
-            out.append(f'<text x="{label_w + w + 5:.1f}" y="{y + bar_h * 0.78:.1f}" fill="{INK}" font-family="{MONO}" font-size="8.5">{eur(v)}</text>')
+            out.append(f'<text x="{label_w + w + 5:.1f}" y="{y + bar_h * 0.78:.1f}" fill="{INK}" font-family="{MONO}" font-size="8.5">{usd(v)}</text>')
             y += bar_h + gap
         y += 6
     out.append("</svg>")
@@ -485,7 +479,7 @@ page(f"""
     <div class="tag">// sponsorship proposal · Timisoara · {DATES}</div>
     <h1>Agentic<br>Hackathon<br><span>human in<br>the loop</span></h1>
     <p class="lead">{PARTICIPANTS} students from western Romania. One weekend. AI agents with a human in control.<br>
-    <b>We ask Nokia to be the Title Partner: {eur(TITLE_TIER)}, decision by {DECISION_BY}.</b></p>
+    <b>We ask Nokia to be the Title Partner: {usd(TITLE_TIER)}, decision by {DECISION_BY}.</b></p>
   </div>
   <div>{loop_diagram(270)}</div>
 </div>
@@ -501,7 +495,7 @@ page(f"""
     <div><div class="v">{PARTICIPANTS}</div><div class="l">participants<br>{HIGH_SCHOOL} high school, {UNIVERSITY} university</div></div>
     <div><div class="v">{TEAMS}</div><div class="l">teams of two<br>bring your own laptop</div></div>
     <div><div class="v">44h</div><div class="l">Friday 17:00 to<br>Sunday 16:00</div></div>
-    <div><div class="v">{eur(TITLE_TIER)}</div><div class="l">proposed Title Partner<br>package for Nokia</div></div>
+    <div><div class="v">{usd(TITLE_TIER)}</div><div class="l">proposed Title Partner<br>package for Nokia</div></div>
   </div>
   <div class="meta">
     <div><b>Organizers</b>UPT · UVT · agentic.tm</div>
@@ -568,16 +562,16 @@ mostly from UPT. The {HIGH_SCHOOL} high school students here are the UPT intake 
 # 3. Budget -------------------------------------------------------------------
 page(f"""
 <p class="kicker">02 · Budget</p>
-<h1>Where the money goes: {eur(CASH_TOTAL)}</h1>
+<h1>Where the money goes: {usd(CASH_TOTAL)}</h1>
 <p class="lead">Two lines, both in front of every participant: the developer tooling each team builds with, and
 the prizes. Everything else comes from the universities, agentic.tm and the other sponsors.</p>
 <div class="cols">
 <div>
-<div class="chart">{split_bar([("Developer tooling credits", CREDITS_TOTAL_EUR, BLUE), ("Prize pool", PRIZES_TOTAL, NAVY)], width=322, bar_h=22, value_fmt=eur)}</div>
+<div class="chart">{split_bar([("Developer tooling credits", CREDITS_TOTAL_USD, BLUE), ("Prize pool", PRIZES_TOTAL, NAVY)], width=322, bar_h=22, value_fmt=usd)}</div>
 <table>
-<tr><th>Cash line</th><th class="num">EUR</th></tr>
-{''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{eur(v)}</td></tr>' for l, v, n in CASH_LINES)}
-<tr class="total"><td>Total, the Title Partner package</td><td class="num">{eur(CASH_TOTAL)}</td></tr>
+<tr><th>Cash line</th><th class="num">USD</th></tr>
+{''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{usd(v)}</td></tr>' for l, v, n in CASH_LINES)}
+<tr class="total"><td>Total, the Title Partner package</td><td class="num">{usd(CASH_TOTAL)}</td></tr>
 </table>
 <h3>Credits: {usd(CREDITS_TOTAL_USD)}</h3>
 <div class="chart">{split_bar([(f"Cursor seats, ${SEAT_USD} × {PARTICIPANTS}", SEATS_TOTAL_USD, BLUE), ("Reserve", RESERVE_USD, GREEN)], width=322, value_fmt=usd)}</div>
@@ -585,13 +579,13 @@ the prizes. Everything else comes from the universities, agentic.tm and the othe
 scenarios on page 4.</p>
 </div>
 <div>
-<h3 style="margin-top:0">Prize pool: {eur(PRIZES_TOTAL)}, per team of two</h3>
+<h3 style="margin-top:0">Prize pool: {usd(PRIZES_TOTAL)}, per team of two</h3>
 <div class="chart">{grouped_prize_chart(PRIZES, width=322)}</div>
 <p class="small">High school winners get vouchers, which avoids tax and guardianship paperwork for minors.
 Nokia's judges hand out the Nokia Challenge Award.</p>
 <h3>Per participant</h3>
 <div class="cols3">
-  <div class="tile"><div class="v">{eur(CASH_TOTAL / PARTICIPANTS)}</div><div class="l">of sponsor money per participant</div></div>
+  <div class="tile"><div class="v">{usd(CASH_TOTAL / PARTICIPANTS)}</div><div class="l">of sponsor money per participant</div></div>
   <div class="tile"><div class="v">${SEAT_USD}</div><div class="l">Cursor seat each, plus the shared reserve</div></div>
   <div class="tile"><div class="v">{sum(len(i) for _, i in PRIZES)}</div><div class="l">awards across two tracks</div></div>
 </div>
@@ -620,7 +614,7 @@ page(f"""
 <table>
 <tr><th>Component</th><th class="num">Basis</th><th class="num">USD</th></tr>
 {''.join(f'<tr><td>{esc(l)}<br><span style="color:{INK2};font-size:7.6pt">{esc(n)}</span></td><td class="num">{esc(b)}</td><td class="num">{usd(v)}</td></tr>' for l, b, v, n in CREDITS)}
-<tr class="total"><td>Total</td><td class="num"></td><td class="num">{usd(CREDITS_TOTAL_USD)}<br><span style="font-weight:400;color:{INK2}">{eur(CREDITS_TOTAL_EUR)}</span></td></tr>
+<tr class="total"><td>Total</td><td class="num"></td><td class="num">{usd(CREDITS_TOTAL_USD)}<br><span style="font-weight:400;color:{INK2}">{usd(CREDITS_TOTAL_USD)}</span></td></tr>
 </table>
 <h3>Why a seat is enough</h3>
 <p class="small">Auto mode on a paid Cursor seat is unlimited, so no team is ever stopped. What runs out is the
@@ -658,8 +652,8 @@ page(f"""
 <div class="tiers">
   <div class="tier top">
     <div class="name">Title Partner <span class="pill">proposed for Nokia</span></div>
-    <div class="price">{eur(TITLE_TIER)}</div>
-    <div class="funds">One slot. Credits {eur(CREDITS_TOTAL_EUR)} + prize pool {eur(PRIZES_TOTAL)}: the two lines every participant sees.</div>
+    <div class="price">{usd(TITLE_TIER)}</div>
+    <div class="funds">One slot. Credits {usd(CREDITS_TOTAL_USD)} + prize pool {usd(PRIZES_TOTAL)}: the two lines every participant sees.</div>
     <ul>
       <li>"Powered by Nokia" naming</li>
       <li>20-minute opening keynote</li>
@@ -673,7 +667,7 @@ page(f"""
   </div>
   <div class="tier">
     <div class="name">Gold</div>
-    <div class="price">{eur(GOLD_TIER)}</div>
+    <div class="price">{usd(GOLD_TIER)}</div>
     <div class="funds">One slot. Swag, print, photo and video, on top of the Title package.</div>
     <ul>
       <li>30-minute Saturday workshop</li>
@@ -685,7 +679,7 @@ page(f"""
   </div>
   <div class="tier">
     <div class="name">Silver</div>
-    <div class="price">{eur(SILVER_TIER)}</div>
+    <div class="price">{usd(SILVER_TIER)}</div>
     <div class="funds">Open. Cash or services: print, prize hardware, media.</div>
     <ul>
       <li>Logo on site and stage</li>
@@ -697,15 +691,15 @@ page(f"""
 <h2>How the budget closes</h2>
 <div class="cols">
 <div>
-<p>Nokia's {eur(TITLE_TIER)} is the whole cash budget: credits and prizes. Gold and Silver sponsors add swag, print,
+<p>Nokia's {usd(TITLE_TIER)} is the whole cash budget: credits and prizes. Gold and Silver sponsors add swag, print,
 photo and video on top, outside this budget.</p>
 <div class="sponsor-tile"><img src="{LOGOS['spacexai']}" alt="SpaceXAI"><div><b>Confirmed sponsor.</b> Package being finalized, not yet counted above.
 Whatever it and the credit programs bring lowers the credits line and is reported back to Nokia.</div></div>
 </div>
 <div>
-<div class="callout" style="margin-top:0"><p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY},
-and one Nokia Challenge brief. Then a one-page agreement and two invoices: {eur(TITLE_TIER // 2)} on signing in
-October, {eur(TITLE_TIER // 2)} in December with the report.</p></div>
+<div class="callout" style="margin-top:0"><p><b>The decision we ask of Nokia:</b> Title Partner at {usd(TITLE_TIER)}, confirmed by {DECISION_BY},
+and one Nokia Challenge brief. Then a one-page agreement and two invoices: {usd(TITLE_TIER // 2)} on signing in
+October, {usd(TITLE_TIER // 2)} in December with the report.</p></div>
 </div>
 </div>
 """)
@@ -749,7 +743,7 @@ page(f"""
 <tr><td>Fewer participants</td><td>Credits scale with headcount; unspent money is reported and returned.</td></tr>
 </table>
 <div class="callout">
-<p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
+<p><b>Next step:</b> Nokia confirms the Title Partner package ({usd(TITLE_TIER)}) and picks one Nokia Challenge
 brief by {DECISION_BY}. We send the one-page agreement the same week.</p>
 </div>
 </div>
@@ -797,4 +791,4 @@ if not chrome:
 subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-sandbox", "--no-pdf-header-footer",
                 f"--print-to-pdf={OUT_PDF}", OUT_HTML.as_uri()], check=True, capture_output=True)
 print(f"wrote {OUT_PDF}")
-print(f"cash {eur(CASH_TOTAL)}  credits {usd(CREDITS_TOTAL_USD)} = {eur(CREDITS_TOTAL_EUR)}  title {eur(TITLE_TIER)}")
+print(f"cash {usd(CASH_TOTAL)}  credits {usd(CREDITS_TOTAL_USD)} = {usd(CREDITS_TOTAL_USD)}  title {usd(TITLE_TIER)}")
