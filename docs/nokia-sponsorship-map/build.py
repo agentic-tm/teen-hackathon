@@ -117,7 +117,9 @@ SCENARIOS = [
                                         ("Model provider programs", 6000)]),
 ]
 
-DATES = "Late November 2026, or 23 January 2027"
+DATES = "Friday 27 to Sunday 29 November 2026"
+VENUE = "UPT, Faculty of Automation and Computers, Bd. Vasile Parvan 2, Timisoara"
+DECISION_BY = "15 October 2026"
 
 # ---------------------------------------------------------------- STYLE -----
 NAVY = "#0a1f44"      # agentic.tm mark background
@@ -389,7 +391,7 @@ page(f"""
 </div>
 <div class="hero">
   <div>
-    <div class="tag">// sponsorship proposal · Timisoara</div>
+    <div class="tag">// sponsorship proposal · Timisoara · 27-29 Nov 2026</div>
     <h1>Agentic<br>Programming<br>Hackathon<br><span>human in the loop</span></h1>
     <p class="lead">{PARTICIPANTS} high school and university students from western Romania spend a weekend
     building AI agents that keep a person in control. We propose Nokia as the Title Partner.</p>
@@ -412,8 +414,8 @@ page(f"""
   </div>
   <div class="meta">
     <div><b>Organizers</b>agentic.tm · Politehnica University of Timisoara · West University of Timisoara</div>
-    <div><b>Date</b>{DATES}. Locked with UPT and UVT in early October.</div>
-    <div><b>Venue</b>UPT or UVT campus, Timisoara. Venue, dorms and GPU cluster provided by the universities.</div>
+    <div><b>Date</b>{DATES}</div>
+    <div><b>Venue</b>{VENUE}. Dorms on the UPT student campus, GPU cluster from UPT and UVT.</div>
   </div>
 </div>
 """, "cover")
@@ -442,16 +444,16 @@ Sunday noon. No fixed problem list. A Nokia Challenge track for teams that want 
 group. High school and university teams are judged separately.</p>
 <h3>The weekend</h3>
 <table class="sched">
-<tr><td>Fri 17:00</td><td>Check-in, opening, Nokia keynote, theme briefing. Hacking starts 19:00</td></tr>
-<tr><td>Saturday</td><td>Hacking. Mentor office hours, two short workshops, Nokia Challenge briefing</td></tr>
-<tr><td>Sun 12:00</td><td>Code freeze. Demos from 13:00 in two rooms, one per track</td></tr>
-<tr><td>Sun 15:30</td><td>Awards, closing, group photo</td></tr>
+<tr><td>Fri 27 Nov</td><td>17:00 check-in, opening, Nokia keynote, theme briefing. Hacking starts 19:00</td></tr>
+<tr><td>Sat 28 Nov</td><td>Hacking all day. Mentor office hours, two short workshops, Nokia Challenge briefing</td></tr>
+<tr><td>Sun 29 Nov</td><td>12:00 code freeze. Demos from 13:00 in two rooms, one per track. 15:30 awards, closing, group photo</td></tr>
 </table>
 <h3>Organizers</h3>
 <p class="small"><b>agentic.tm</b> is Timisoara's agentic AI community: 250 members on Discord, 500+ on LinkedIn,
 monthly meetups since October 2025. It brings the program, the mentors and the sponsors.
-<b>UPT</b> and <b>UVT</b> bring the venue, dorm rooms for out-of-town students, a GPU cluster for open-weight
-models, and faculty mentors and judges.</p>
+<b>UPT</b> hosts the event at the Faculty of Automation and Computers on Bd. Vasile Parvan and houses
+out-of-town students in its dorms. <b>UPT</b> and <b>UVT</b> provide the GPU cluster for open-weight models,
+and faculty mentors and judges.</p>
 </div>
 <div>
 <h2>What the Title Partner gets</h2>
@@ -469,7 +471,7 @@ models, and faculty mentors and judges.</p>
 <div class="callout"><p><b>Why this fits Nokia Timisoara.</b> The campus employs about 1,300 people, roughly 600 of
 them R&amp;D engineers, and hires mostly from UPT. The {HIGH_SCHOOL} high school students in the room are
 the UPT intake of 2027 to 2029. The {UNIVERSITY} university students are hires of 2027.</p></div>
-<h3>Nokia Challenge track, two candidate briefs</h3>
+<h3>Nokia Challenge track: Nokia picks one of these two briefs</h3>
 <ul>
   <li><b>Incident triage with approval.</b> An agent reads alarms and logs from a simulated network, proposes
   a diagnosis and a fix, and waits for an engineer to approve before acting.</li>
@@ -622,9 +624,9 @@ Timisoara's universities and tech scene. The last {eur(CASH_TOTAL - TITLE_TIER -
 covered by any credit program approval, which lowers the credits line.</p>
 </div>
 <div>
-<p>Nokia's package is fixed at {eur(TITLE_TIER)} whatever the other tiers do. <b>On a yes:</b> a one-page
-agreement listing the benefits above, the amount, and the reporting Nokia receives. Invoice from the organizing
-entity, half on signing, half after the event with the report.</p>
+<p><b>The decision we ask of Nokia:</b> Title Partner at {eur(TITLE_TIER)}, confirmed by {DECISION_BY}. On a yes,
+a one-page agreement lists the benefits above, the amount and the reporting. Two invoices from the organizing
+entity: {eur(TITLE_TIER // 2)} on signing in October, {eur(TITLE_TIER // 2)} in December with the report.</p>
 </div>
 </div>
 <div class="cols">
@@ -651,24 +653,22 @@ entity, half on signing, half after the event with the report.</p>
 """)
 
 # 6. Plan, risks, next steps ----------------------------------------------------
-months = ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"]
+months = ["Sep", "Oct", "Nov", "Dec", "Jan"]
 phases = [
     ("Sponsor decisions, Nokia first", 0.4, 1.3, BLUE),
     ("Credit applications, four providers", 0.3, 2.0, BLUE),
-    ("Date and venue locked", 0.8, 1.4, BLUE),
     ("Site, identity, registration", 1.2, 2.2, BLUE),
     ("School outreach, four counties", 1.3, 2.8, BLUE),
     ("Mentor recruiting and briefing", 1.0, 2.6, BLUE),
     ("Seats and credits provisioned", 2.0, 2.8, BLUE),
-    ("Event, late November", 2.8, 3.05, NAVY),
-    ("Event, alternative 23 January", 4.7, 4.95, NAVY),
+    ("Event, 27 to 29 November", 2.87, 3.0, NAVY),
     ("Report and showcase to sponsors", 3.1, 3.7, BLUE),
 ]
 page(f"""
 <p class="kicker">05 · Plan, risks, next steps</p>
 <h1>From today to the event</h1>
-<p class="lead">Two candidate weekends: the end of November 2026, or 23 January 2027. UPT and UVT confirm in early
-October. Everything before the date lock runs now; everything after shifts by two months if January wins.</p>
+<p class="lead">The event is on {DATES} at {VENUE}. Sponsor decisions
+come first, because the sponsor's name goes on the site and the school announcements when they launch on 20 October.</p>
 <div class="chart">{timeline_chart(phases, months, width=560, label_w=190)}</div>
 <div class="cols">
 <div>
@@ -676,12 +676,13 @@ October. Everything before the date lock runs now; everything after shifts by tw
 <table>
 <tr><th>When</th><th>What</th></tr>
 <tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 20 Sep</td><td>This proposal reviewed with Nokia</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 10 Oct</td><td>Date and venue confirmed; Cursor and Mistral answers; Anthropic and OpenAI applications in</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 15 Oct</td><td>Nokia's decision on the Title package, so the name goes on the site at launch</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 10 Oct</td><td>Cursor and Mistral answers on credits; Anthropic and OpenAI applications in</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 15 Oct</td><td>Nokia confirms the Title package and picks the challenge brief; agreement signed</td></tr>
 <tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 20 Oct</td><td>Site live, registration open, first school announcements</td></tr>
 <tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 10 Nov</td><td>10 mentors briefed; Nokia Challenge brief final</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">T minus 2 wk</td><td>Registration closes, consent forms in, seats and credits provisioned, tooling tested end to end</td></tr>
-<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">T plus 2 wk</td><td>Report, video and project showcase to sponsors and press</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">13 Nov</td><td>Registration closes, consent forms in, seats and credits provisioned, tooling tested end to end</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">27-29 Nov</td><td>The event</td></tr>
+<tr><td class="mono" style="font-size:7.8pt;white-space:nowrap">by 11 Dec</td><td>Report, video and project showcase to sponsors and press; second invoice</td></tr>
 </table>
 <h2>Team</h2>
 <p class="small"><b>Vlad Temian</b>, agentic.tm: program, sponsors, credits. <b>Ovidiu Banias</b>: universities, date,
@@ -692,14 +693,14 @@ venue, accommodation. <b>Marius</b>, agentic.tm: identity, site, media. <b>Danie
 <table>
 <tr><th>Risk</th><th>Response</th></tr>
 <tr><td>No provider grants credits</td><td>The budget assumes exactly that. Any grant is upside. Free tiers and the university GPU clusters guarantee every team can build.</td></tr>
-<tr><td>The date slips to January</td><td>Both weekends are held with the universities. Sponsor money is not spent before the date is locked.</td></tr>
+<tr><td>Venue falls through</td><td>UVT's campus is the backup, same weekend. Sponsor money is not spent before the venue booking is signed.</td></tr>
 <tr><td>Minors and accounts</td><td>Seats are created by the organizers, so no student signs a contract or enters a card. Parental consent covers participation and photos. Teacher per school group, medical assistance on site.</td></tr>
 <tr><td>Fewer participants</td><td>Food, swag and credits scale with headcount. Unspent money is reported and returned or rolled into prizes, as the sponsor prefers.</td></tr>
 <tr><td>Teams run out of credits</td><td>Per-seat caps stop one team draining the pool. The reserve covers Sunday. Open-weight models on the cluster are the fallback.</td></tr>
 </table>
 <div class="callout">
-<p><b>Next step:</b> review this proposal together this week, adjust the package and the prize structure to what
-Nokia can carry, and aim for a decision by mid-October.</p>
+<p><b>Next step:</b> Nokia confirms the Title Partner package ({eur(TITLE_TIER)}) and picks one Nokia Challenge
+brief by {DECISION_BY}. We send the one-page agreement the same week.</p>
 <p style="margin-top:2mm"><b>Contact</b> · Vlad Temian, agentic.tm · <span class="mono">me@vtemian.com</span></p>
 </div>
 </div>
